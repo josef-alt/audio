@@ -16,7 +16,7 @@ public class MediaUtils {
 	 */
 	public enum Format {
 		// TODO other common formats
-		MP3, MP4, M4A, UNKNOWN;
+		MP3, MP4, M4A, WAV, UNKNOWN;
 	}
 
 	/**
@@ -48,7 +48,42 @@ public class MediaUtils {
 	 * File format according to the first few bytes
 	 */
 	public static Format determineFormatByHeader(Path path) {
-		// TODO parse header
+		byte[] header = getHeader(path);
+
+		// MP3
+		if (header[0] == 0x49 && header[1] == 0x44 && header[2] == 0x33) {
+			// Sample:
+			// ID3.......TALB..
+
+			// technically this just means the data is in id3 format, but for now we'll call
+			// that mp3
+			return Format.MP3;
+		}
+		// WAVE
+		else if (header[0] == 0x52 && header[1] == 0x49 && header[2] == 0x46 && header[3] == 0x46) {
+			// RIFF
+			// Sample:
+			// RIFFú.“.WAVEfmt
+
+			if (header[8] == 0x57 && header[9] == 0x41 && header[10] == 0x56) {
+				return Format.WAV;
+			}
+		}
+		// MP4 / M4A
+		if (header[4] == 0x66 && header[5] == 0x74 && header[6] == 0x79 && header[7] == 0x70) {
+			// ftyp
+			if (header[8] == 0x4D && header[9] == 0x34 && header[10] == 0x41) {
+				// Sample:
+				// ....ftypM4A ....
+				// M4A isomiso2..À]
+				return Format.M4A;
+			}
+
+			// Alternate Format Sample:
+			// ....ftypdash....
+			// iso6mp41...2moov
+		}
+
 		return null;
 	}
 
@@ -57,9 +92,10 @@ public class MediaUtils {
 	 * 
 	 * @param path the {@link Path} to the file to be read; must not be {@code null}
 	 * @throws IllegalArgumentException if {@code path} is {@code null}
-	 * @return byte array containing the first {@code HEADER_SIZE} bytes of {@code path}
+	 * @return byte array containing the first {@code HEADER_SIZE} bytes of
+	 *         {@code path}
 	 */
-	public byte[] getHeader(Path path) {
+	public static byte[] getHeader(Path path) {
 		if (path == null) {
 			throw new IllegalArgumentException("Path must not be null.");
 		}

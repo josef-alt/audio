@@ -5,7 +5,17 @@ JavaFX's Media class provides basic audio functionallity; however, it leaves a l
 To do: come up with better name than audio
 
 ## JavaFX Supported Formats
-add table here
+| Container | Can Play | Can Read Metadata |
+| :- | :- | :- |
+| AAC | Yes | No |
+| AIF(F) | Yes | No |
+| Mp3 | Yes | Yes |
+| Mp4 | Yes | No |
+| M4A | Yes | No |
+| FLAC | No | No |
+| OGG| No | No |
+| WAV | Yes | No |
+| WMA | No | No |
 
 ## My Supported Formats
 add second table here

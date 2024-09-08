@@ -53,7 +53,7 @@ public class MediaUtils {
 		byte[] header = getHeader(path);
 
 		// MP3
-		if (header[0] == 0x49 && header[1] == 0x44 && header[2] == 0x33) {
+		if ((header[0] & 0xFF) == 0x49 && (header[1] & 0xFF) == 0x44 && (header[2] & 0xFF) == 0x33) {
 			// Sample:
 			// ID3.......TALB..
 
@@ -62,19 +62,21 @@ public class MediaUtils {
 			return Format.MP3;
 		}
 		// WAVE
-		else if (header[0] == 0x52 && header[1] == 0x49 && header[2] == 0x46 && header[3] == 0x46) {
+		else if ((header[0] & 0xFF) == 0x52 && (header[1] & 0xFF) == 0x49 && (header[2] & 0xFF) == 0x46
+				&& (header[3] & 0xFF) == 0x46) {
 			// RIFF
 			// Sample:
 			// RIFFú.“.WAVEfmt
 
-			if (header[8] == 0x57 && header[9] == 0x41 && header[10] == 0x56) {
+			if ((header[8] & 0xFF) == 0x57 && (header[9] & 0xFF) == 0x41 && (header[10] & 0xFF) == 0x56) {
 				return Format.WAV;
 			}
 		}
 		// MP4 / M4A
-		if (header[4] == 0x66 && header[5] == 0x74 && header[6] == 0x79 && header[7] == 0x70) {
+		if ((header[4] & 0xFF) == 0x66 && (header[5] & 0xFF) == 0x74 && (header[6] & 0xFF) == 0x79
+				&& (header[7] & 0xFF) == 0x70) {
 			// ftyp
-			if (header[8] == 0x4D && header[9] == 0x34 && header[10] == 0x41) {
+			if ((header[8] & 0xFF) == 0x4D && (header[9] & 0xFF) == 0x34 && (header[10] & 0xFF) == 0x41) {
 				// Sample:
 				// ....ftypM4A ....
 				// M4A isomiso2..À]

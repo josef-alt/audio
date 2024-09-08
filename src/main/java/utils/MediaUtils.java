@@ -93,7 +93,7 @@ public class MediaUtils {
 			return Format.WMA;
 		}
 
-		return null;
+		return Format.UNKNOWN;
 	}
 
 	/**

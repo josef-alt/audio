@@ -32,6 +32,10 @@ public class MediaUtils {
 		String fileName = path.getFileName().toString().toLowerCase();
 		int dot = fileName.lastIndexOf('.');
 
+		if (dot == -1) {
+			return Format.UNKNOWN;
+		}
+
 		switch (fileName.substring(dot + 1)) {
 			case "mp3":
 				return Format.MP3;

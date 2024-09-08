@@ -19,3 +19,10 @@ To do: come up with better name than audio
 
 ## My Supported Formats
 add second table here
+
+# Resources
+One problem I have run into during the course of this project has been finding sample files. Formats like MP3 are easy enough to come by, but I have never actually encountered an AIF, OGG, or AAC file in the wild before. 
+
+Whether it is for reference to a format I've never encountered before, or to view the variations in formats like M4A/mp4 (where every other sample file has a unique header for some reason), I have found the following sites useful:
+* https://filesampleshub.com/format/audio
+* https://samples.ffmpeg.org/

@@ -8,11 +8,11 @@ import java.nio.file.Path;
 
 import org.junit.jupiter.api.Test;
 
-import utils.MediaUtils;
+import utils.FileUtils;
 
 public class AudioIT {
 
-	private static final MediaUtils mu = new MediaUtils();
+	private static final FileUtils mu = new FileUtils();
 
 	@Test
 	void readHeader() {

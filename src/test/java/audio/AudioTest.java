@@ -11,8 +11,8 @@ import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
 
-import utils.MediaUtils;
-import utils.MediaUtils.Format;
+import utils.FileUtils;
+import utils.FileUtils.Format;
 
 public class AudioTest {
 
@@ -24,7 +24,7 @@ public class AudioTest {
 
 		if (Files.exists(file)) {
 			assertArrayEquals(new byte[] { 73, 68, 51, 3, 0, 0, 0, 0, 17, 20, 84, 65, 76, 66, 0, 0, 0, 17, 0, 0, 0, 84,
-					104, 101, 32, 87, 104, 105, 116, 101, 32, 65 }, MediaUtils.getHeader(file));
+					104, 101, 32, 87, 104, 105, 116, 101, 32, 65 }, FileUtils.getHeader(file));
 		} else {
 			System.out.println(file);
 			fail("Could not read file");
@@ -43,7 +43,7 @@ public class AudioTest {
 		try (Stream<Path> testCases = Files.list(directory)) {
 			testCases.forEach(test -> {
 				try {
-					assertEquals(expected, MediaUtils.determineFormatByHeader(test));
+					assertEquals(expected, FileUtils.determineFormatByHeader(test));
 				} catch (Exception e) {
 					fail("Error processing file: " + test + "\n" + e.getMessage());
 				}

@@ -9,7 +9,7 @@ import java.nio.file.StandardOpenOption;
 /**
  * Utils for later use by my audio library
  */
-public class MediaUtils {
+public class FileUtils {
 
 	/**
 	 * Represent the most common audio formats

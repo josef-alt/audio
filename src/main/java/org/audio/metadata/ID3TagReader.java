@@ -134,9 +134,54 @@ public class ID3TagReader {
 			int nRead = channel.read(buffer);
 			buffer.flip();
 
-			int size = getSizeFromHeader(buffer);
+			int id3_length = getSizeFromHeader(buffer);
 
-			// TODO: Read tags
+			// reading all frames
+			// TODO break into chunks
+			buffer = ByteBuffer.allocate(id3_length);
+			channel.read(buffer);
+			buffer.flip();
+
+			// iterate through all frames
+			// 4 byte frame ID
+			// 4 byte frame size
+			// 2 byte frame flags
+			while (buffer.hasRemaining()) {
+				byte[] frameID = new byte[4];
+				buffer.get(frameID);
+
+				int size = buffer.getInt();
+				short flags = buffer.getShort();
+
+				byte[] frameData = new byte[size];
+				buffer.get(frameData);
+
+				// stop reading once we reach the void
+				if (frameID[0] == 0 && frameID[1] == 0 && frameID[2] == 0 && frameID[3] == 0) {
+					break;
+				} else {
+					// in the event of unrecognized frame IDs, I want to present the data as-is
+					// otherwise, I want to convert the frame ID to a common name, so that metadata
+					// for different file types matches
+					String tag = new String(frameID);
+					if (ID3_TAGS.containsKey(tag)) {
+						tag = ID3_TAGS.get(tag);
+					}
+
+					// eliminate preceding and succeeding zeros
+					int offset = 0;
+					while (offset < frameData.length && frameData[offset] == 0) {
+						offset++;
+					}
+					int length = frameData.length;
+					while (length > 0 && frameData[length - 1] == 0) {
+						length--;
+					}
+
+					// TODO: ID3 allows multiple PRIV tags but this will only show the last one
+					metadata.put(tag, new String(frameData, offset, length - offset));
+				}
+			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

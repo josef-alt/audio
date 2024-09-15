@@ -6,9 +6,8 @@ import static org.junit.jupiter.api.Assertions.fail;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+import org.audio.utils.FileUtils;
 import org.junit.jupiter.api.Test;
-
-import utils.FileUtils;
 
 public class AudioIT {
 

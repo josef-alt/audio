@@ -9,10 +9,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.stream.Stream;
 
+import org.audio.utils.FileUtils;
+import org.audio.utils.FileUtils.Format;
 import org.junit.jupiter.api.Test;
-
-import utils.FileUtils;
-import utils.FileUtils.Format;
 
 public class AudioTest {
 

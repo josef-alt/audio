@@ -135,6 +135,7 @@ public class ID3TagReader {
 			buffer.flip();
 
 			int id3_length = getSizeFromHeader(buffer);
+			int id3_version = buffer.get(3);
 
 			// reading all frames
 			// TODO break into chunks
@@ -150,7 +151,11 @@ public class ID3TagReader {
 				byte[] frameID = new byte[4];
 				buffer.get(frameID);
 
-				int size = buffer.getInt();
+				// make sure to get size according to ID3 version
+				byte[] frameSize = new byte[4];
+				buffer.get(frameSize);
+				int size = convertBytesToInt(frameSize, id3_version == 4);
+
 				short flags = buffer.getShort();
 
 				byte[] frameData = new byte[size];
@@ -203,7 +208,6 @@ public class ID3TagReader {
 		return false;
 	}
 
-
 	/**
 	 * Determine the size of the ID3 tag header
 	 * 
@@ -220,12 +224,33 @@ public class ID3TagReader {
 		// 0b01111111 = 0x7F
 		// should be
 		// byte 0 << 21, byte 1 << 14, byte 2 << 7, byte 3
+		return convertBytesToInt(data, true);
+	}
 
+	/**
+	 * Converts array of bytes into a 32 bit integer according with or without MSB.
+	 * ID3v2.3: 32 bits
+	 * ID3V2.4: 28 bits where the first bit of each octet is ignored
+	 * 
+	 * @param bytes
+	 * @param version
+	 * @return
+	 */
+	private static int convertBytesToInt(byte[] bytes, boolean dropMSB) {
 		int size = 0;
-		size |= (data[0] & 0x7F) << 21;
-		size |= (data[1] & 0x7F) << 14;
-		size |= (data[2] & 0x7F) << 7;
-		size |= (data[3] & 0x7F);
+
+		if (dropMSB) {
+			size |= (bytes[0] & 0x7F) << 21;
+			size |= (bytes[1] & 0x7F) << 14;
+			size |= (bytes[2] & 0x7F) << 7;
+			size |= (bytes[3] & 0x7F);
+		} else {
+			size |= (bytes[0] & 0xFF) << 24;
+			size |= (bytes[1] & 0xFF) << 16;
+			size |= (bytes[2] & 0xFF) << 8;
+			size |= (bytes[3] & 0xFF);
+		}
+
 		return size;
 	}
 }

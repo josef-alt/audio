@@ -110,15 +110,15 @@ public class ID3TagReader {
 	 * @param source path to audio file
 	 * @return metadata in key-value pairs
 	 */
-	public static Map<String, String> getMetadata(Path source) {
-		HashMap<String, String> metadata = new HashMap<>();
+	public static Metadata getMetadata(Path source) {
+		Metadata metadata = new Metadata();
 
 		// determine ID3 version
 		if (checkHeader(source)) {
 			ID3v2(source, metadata);
 		}
 
-		return Collections.unmodifiableMap(metadata);
+		return metadata;
 	}
 
 	/**
@@ -128,7 +128,7 @@ public class ID3TagReader {
 	 * @param source   path to audio file
 	 * @param metadata map to be populated with any found metadata
 	 */
-	private static void ID3v2(Path source, Map<String, String> metadata) {
+	private static void ID3v2(Path source, Metadata metadata) {
 		try (FileChannel channel = FileChannel.open(source, StandardOpenOption.READ)) {
 			ByteBuffer buffer = ByteBuffer.allocate(HEADER_SIZE);
 			int nRead = channel.read(buffer);
@@ -184,7 +184,11 @@ public class ID3TagReader {
 					}
 
 					// TODO: ID3 allows multiple PRIV tags but this will only show the last one
-					metadata.put(tag, new String(frameData, offset, length - offset));
+					// TODO: COMR commercial frame allows image/png and image/jpeg
+					if (tag.equals(ID3_TAGS.get("APIC"))) {
+					} else {
+						metadata.addTextField(tag, new String(frameData, offset, length - offset));
+					}
 				}
 			}
 		} catch (IOException e) {

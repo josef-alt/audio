@@ -5,6 +5,7 @@ import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -98,6 +99,11 @@ public class ID3TagReader {
 		ID3_TAGS = Collections.unmodifiableMap(tags);
 	}
 
+	// currently using png instead of image/png because mime type can be omitted
+	private static final byte[] MIME_IMAGE_PNG = "png".getBytes();
+	private static final byte[] PNG_HEADER = { (byte) 0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A };
+	private static final byte[] PNG_FOOTER = { 0x49, 0x45, 0x4E, 0x44, (byte) 0xAE, 0x42, 0x60, (byte) 0x82 };
+
 	/**
 	 * Standard ID3v2 has a 10 byte header
 	 * Additional 6-10 bytes optional
@@ -186,6 +192,7 @@ public class ID3TagReader {
 					// TODO: ID3 allows multiple PRIV tags but this will only show the last one
 					// TODO: COMR commercial frame allows image/png and image/jpeg
 					if (tag.equals(ID3_TAGS.get("APIC"))) {
+						metadata.addImage(extractImage(frameData));
 					} else {
 						metadata.addTextField(tag, new String(frameData, offset, length - offset));
 					}
@@ -256,5 +263,59 @@ public class ID3TagReader {
 		}
 
 		return size;
+	}
+
+	/**
+	 * Determine if {@code} query matches {@code data} at {@code index}
+	 * 
+	 * @param data  search space
+	 * @param index start index
+	 * @param query search term
+	 * @return true if {@code query} is found at {@code index}
+	 */
+	private static boolean prefixMatches(byte[] data, int index, byte[] query) {
+		int offset = 0;
+
+		for (; offset < query.length;) {
+			if (data[index + offset] == query[offset]) {
+				offset++;
+			} else {
+				break;
+			}
+		}
+
+		return offset == query.length;
+	}
+
+	/**
+	 * 
+	 * @param data full ID3 frame containing header, mime type, and image data
+	 * @return
+	 */
+	private static CoverArt extractImage(byte[] data) {
+		// TODO: jpeg support
+		String mimeType = "image/";
+		String subType = "";
+
+		int imageStart = 0;
+		int imageEnd = data.length;
+		for (int idx = 0; idx < data.length; ++idx) {
+			if (prefixMatches(data, idx, MIME_IMAGE_PNG)) {
+				subType = "png";
+			}
+
+			if (subType.equals("png")) {
+				if (prefixMatches(data, idx, PNG_HEADER)) {
+					imageStart = idx;
+				}
+				if (prefixMatches(data, idx, PNG_FOOTER)) {
+					imageEnd = idx + PNG_FOOTER.length;
+					break;
+				}
+			}
+		}
+
+		byte[] imageData = Arrays.copyOfRange(data, imageStart, imageEnd);
+		return new CoverArt(mimeType + subType, imageData);
 	}
 }

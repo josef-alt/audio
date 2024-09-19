@@ -15,4 +15,8 @@ public class CoverArt {
 	public byte[] getBinaryData() {
 		return imageData;
 	}
+
+	public String getMimeType() {
+		return type;
+	}
 }

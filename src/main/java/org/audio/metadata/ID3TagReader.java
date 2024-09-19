@@ -276,10 +276,8 @@ public class ID3TagReader {
 	private static boolean prefixMatches(byte[] data, int index, byte[] query) {
 		int offset = 0;
 
-		for (; offset < query.length;) {
-			if (data[index + offset] == query[offset]) {
-				offset++;
-			} else {
+		for (; offset < query.length; offset++) {
+			if (data[index + offset] != query[offset]) {
 				break;
 			}
 		}

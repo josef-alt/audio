@@ -1,14 +1,14 @@
 package org.audio;
 import java.nio.file.Path;
-import java.util.Map;
 
 import org.audio.metadata.ID3TagReader;
+import org.audio.metadata.Metadata;
 import org.audio.utils.FileUtils;
 import org.audio.utils.FileUtils.Format;
 
 public class AudioFile {
 	private Path source;
-	private Map<String, String> metadata;
+	private Metadata metadata;
 
 	public AudioFile(Path src) {
 		source = src;
@@ -24,7 +24,7 @@ public class AudioFile {
 	 * 
 	 * @return An unmodifiable map containing metadata
 	 */
-	public Map<String, String> getMetadata() {
+	public Metadata getMetadata() {
 		return metadata;
 	}
 }

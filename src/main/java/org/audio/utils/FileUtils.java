@@ -16,7 +16,7 @@ public class FileUtils {
 	 */
 	public enum Format {
 		// TODO other common formats
-		MP3, MP4, M4A, WAV, WMA, UNKNOWN;
+		MP3, MP4, M4A, WAV, WMA, FLAC, UNKNOWN;
 	}
 
 	/**
@@ -99,6 +99,9 @@ public class FileUtils {
 				&& (header[12] & 0xFF) == 0x00 && (header[13] & 0xFF) == 0x62 && (header[14] & 0xFF) == 0xCE
 				&& (header[15] & 0xFF) == 0x6C) {
 			return Format.WMA;
+		} else if ((header[0] & 0xFF) == 0x66 && (header[1] & 0xFF) == 0x4C && (header[2] & 0xFF) == 0x61
+				&& (header[3] & 0xFF) == 0x43) {
+			return Format.FLAC;
 		}
 
 		return Format.UNKNOWN;

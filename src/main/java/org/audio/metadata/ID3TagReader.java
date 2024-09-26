@@ -16,7 +16,7 @@ import org.audio.utils.FileUtils.Format;
 /**
  * Read metadata from audio files according to ID3v2 specifications.
  */
-public class ID3TagReader {
+public class ID3TagReader extends MetadataReader {
 
 	// all the officially supported id3 tags and their meanings
 	private static final Map<String, String> ID3_TAGS;
@@ -116,7 +116,7 @@ public class ID3TagReader {
 	 * @param source path to audio file
 	 * @return metadata in key-value pairs
 	 */
-	public static Metadata getMetadata(Path source) {
+	public Metadata getMetadata() {
 		Metadata metadata = new Metadata();
 
 		// determine ID3 version
@@ -134,7 +134,7 @@ public class ID3TagReader {
 	 * @param source   path to audio file
 	 * @param metadata map to be populated with any found metadata
 	 */
-	private static void ID3v2(Path source, Metadata metadata) {
+	private void ID3v2(Path source, Metadata metadata) {
 		try (FileChannel channel = FileChannel.open(source, StandardOpenOption.READ)) {
 			ByteBuffer buffer = ByteBuffer.allocate(HEADER_SIZE);
 			int nRead = channel.read(buffer);
@@ -210,7 +210,7 @@ public class ID3TagReader {
 	 * @param src path to audio file
 	 * @return true if the audio file matches ID3v2 specifications
 	 */
-	private static boolean checkHeader(Path src) {
+	private boolean checkHeader(Path src) {
 		byte[] header = FileUtils.getHeader(src);
 		if (header != null) {
 			return FileUtils.determineFormatByHeader(src) == Format.MP3; // check ID3 tag version
@@ -225,7 +225,7 @@ public class ID3TagReader {
 	 * @param buffer first {@code HEADER_SIZE} bytes of source file
 	 * @return number of bytes used by ID3 tags
 	 */
-	private static int getSizeFromHeader(ByteBuffer buffer) {
+	private int getSizeFromHeader(ByteBuffer buffer) {
 		buffer.position(6);
 		byte[] data = new byte[4];
 		buffer.get(data);
@@ -247,7 +247,7 @@ public class ID3TagReader {
 	 * @param version
 	 * @return
 	 */
-	private static int convertBytesToInt(byte[] bytes, boolean dropMSB) {
+	private int convertBytesToInt(byte[] bytes, boolean dropMSB) {
 		int size = 0;
 
 		if (dropMSB) {
@@ -273,7 +273,7 @@ public class ID3TagReader {
 	 * @param query search term
 	 * @return true if {@code query} is found at {@code index}
 	 */
-	private static boolean prefixMatches(byte[] data, int index, byte[] query) {
+	private boolean prefixMatches(byte[] data, int index, byte[] query) {
 		int offset = 0;
 
 		for (; offset < query.length; offset++) {
@@ -290,7 +290,7 @@ public class ID3TagReader {
 	 * @param data full ID3 frame containing header, mime type, and image data
 	 * @return
 	 */
-	private static CoverArt extractImage(byte[] data) {
+	private CoverArt extractImage(byte[] data) {
 		// TODO: jpeg support
 		String mimeType = "image/";
 		String subType = "";

@@ -3,10 +3,9 @@ package org.audio.metadata;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
-import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 
-public class FLACReader {
+public class FLACReader extends MetadataReader {
 
 	private static int FLAC_HEADER_SIZE = 4;
 	private static int BLOCK_HEADER_SIZE = 32;
@@ -17,7 +16,7 @@ public class FLACReader {
 	 * @param source path to audio file
 	 * @return metadata in key-value pairs
 	 */
-	public static Metadata getMetadata(Path source) {
+	public Metadata getMetadata() {
 		Metadata metadata = new Metadata();
 
 		try (FileChannel channel = FileChannel.open(source, StandardOpenOption.READ)) {

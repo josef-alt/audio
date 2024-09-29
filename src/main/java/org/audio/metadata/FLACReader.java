@@ -32,13 +32,18 @@ public class FLACReader extends MetadataReader {
 			do {
 				buffer = ByteBuffer.allocate(BLOCK_HEADER_SIZE);
 				nRead = channel.read(buffer);
+				buffer.flip();
 
-				int flags = buffer.getChar();
+				int flags = buffer.get() & 0xFF;
 				int lastFlag = (flags & 0xFF) >> 7;
 				lastBlock = lastFlag == 1;
 
 				int blockType = flags & 0x7F;
 				int blockLength = buffer.getInt(0) & 0xFFFFFF;
+
+				buffer = ByteBuffer.allocate(blockLength);
+				channel.read(buffer);
+				buffer.flip();
 
 				if (blockType == 0) {
 					// STREAMINFO

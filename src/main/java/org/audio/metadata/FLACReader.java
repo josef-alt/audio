@@ -55,7 +55,7 @@ public class FLACReader extends MetadataReader {
 				} else if (blockType == 6) {
 					// PICTURE
 				}
-			} while (lastBlock);
+			} while (!lastBlock);
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

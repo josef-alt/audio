@@ -8,7 +8,7 @@ import java.nio.file.StandardOpenOption;
 public class FLACReader extends MetadataReader {
 
 	private static int FLAC_HEADER_SIZE = 4;
-	private static int BLOCK_HEADER_SIZE = 32;
+	private static int BLOCK_HEADER_SIZE = 4;
 
 	/**
 	 * Reads metadata from given flac files

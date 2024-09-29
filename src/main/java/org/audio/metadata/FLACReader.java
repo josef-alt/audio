@@ -4,11 +4,31 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.file.StandardOpenOption;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 public class FLACReader extends MetadataReader {
 
 	private static int FLAC_HEADER_SIZE = 4;
 	private static int BLOCK_HEADER_SIZE = 4;
+	private static final Map<String, String> VORBIS_TAGS;
+	static {
+		Map<String, String> tags = new HashMap<>();
+
+		// there is no official standard set of tags
+		// below are some of the proposed tags matched to the corresponding
+		// description used in ID3TagReader
+		tags.put("TITLE", "Song Title");
+		tags.put("ALBUM", "Album title");
+		tags.put("TRACKNUMBER", "Track number");
+		tags.put("ARTIST", "Lead performer(s)");
+		tags.put("COPYRIGHT", "Copyright/Legal information");
+		tags.put("GENRE", "Content type");
+		tags.put("DATE", "Date");
+		tags.put("ISRC", "international standard recording code");
+		VORBIS_TAGS = Collections.unmodifiableMap(tags);
+	}
 
 	/**
 	 * Reads metadata from given flac files

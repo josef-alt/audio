@@ -28,6 +28,34 @@ public class FLACReader extends MetadataReader {
 
 			// stream info block
 			// optional metadata blocks
+			boolean lastBlock = true;
+			do {
+				buffer = ByteBuffer.allocate(BLOCK_HEADER_SIZE);
+				nRead = channel.read(buffer);
+
+				int flags = buffer.getChar();
+				int lastFlag = (flags & 0xFF) >> 7;
+				lastBlock = lastFlag == 1;
+
+				int blockType = flags & 0x7F;
+				int blockLength = buffer.getInt(0) & 0xFFFFFF;
+
+				if (blockType == 0) {
+					// STREAMINFO
+				} else if (blockType == 1) {
+					// PADDING
+				} else if (blockType == 2) {
+					// APPLICATION
+				} else if (blockType == 3) {
+					// SEEKTABLE
+				} else if (blockType == 4) {
+					// VORBIS_COMMENT
+				} else if (blockType == 5) {
+					// CUESHEET
+				} else if (blockType == 6) {
+					// PICTURE
+				}
+			} while (lastBlock);
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

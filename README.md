@@ -26,3 +26,5 @@ One problem I have run into during the course of this project has been finding s
 Whether it is for reference to a format I've never encountered before, or to view the variations in formats like M4A/mp4 (where every other sample file has a unique header for some reason), I have found the following sites useful:
 * https://filesampleshub.com/format/audio
 * https://samples.ffmpeg.org/
+* https://xiph.org/flac/format.html
+* https://xiph.org/vorbis/doc/v-comment.html

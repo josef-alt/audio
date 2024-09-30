@@ -131,6 +131,27 @@ public class FLACReader extends MetadataReader {
 					// CUESHEET
 				} else if (blockType == 6) {
 					// PICTURE
+
+					int pictureType = buffer.getInt();
+					int mimeLength = buffer.getInt();
+					byte[] mimeType = new byte[mimeLength];
+					buffer.get(mimeType);
+
+					int descriptionLength = buffer.getInt();
+					byte[] description = new byte[descriptionLength];
+					buffer.get(description);
+
+					int imageWidth = buffer.getInt();
+					int imageHeight = buffer.getInt();
+
+					int colorDepth = buffer.getInt();
+					int numColors = buffer.getInt();
+					int imageLength = buffer.getInt();
+					byte[] image = new byte[imageLength];
+					buffer.get(image);
+
+					CoverArt cover = new CoverArt(new String(mimeType), image);
+					metadata.addImage(cover);
 				}
 			} while (!lastBlock);
 

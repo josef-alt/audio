@@ -16,7 +16,7 @@ public class FileUtils {
 	 */
 	public enum Format {
 		// TODO other common formats
-		MP3, MP4, M4A, WAV, WMA, FLAC, UNKNOWN;
+		MP3, MP4, M4A, WAV, WMA, FLAC, OGG, UNKNOWN;
 	}
 
 	/**
@@ -102,6 +102,9 @@ public class FileUtils {
 		} else if ((header[0] & 0xFF) == 0x66 && (header[1] & 0xFF) == 0x4C && (header[2] & 0xFF) == 0x61
 				&& (header[3] & 0xFF) == 0x43) {
 			return Format.FLAC;
+		} else if ((header[0] & 0xFF) == 0x4F && (header[1] & 0xFF) == 0x67 && (header[2] & 0xFF) == 0x67
+				&& (header[3] & 0xFF) == 0x53) {
+			return Format.OGG;
 		}
 
 		return Format.UNKNOWN;

@@ -4,6 +4,19 @@ JavaFX's Media class provides basic audio functionallity; however, it leaves a l
 
 To do: come up with better name than audio
 
+## My Supported Formats
+| Container | Can Play | Can Read Metadata |
+| :- | :- | :- |
+| AAC | No | No |
+| AIF(F) | No | No |
+| Mp3 | No | Yes |
+| Mp4 | No | No |
+| M4A | No | No |
+| FLAC | No | Yes |
+| OGG| No | No |
+| WAV | No | No |
+| WMA | No | No |
+
 ## JavaFX Supported Formats
 | Container | Can Play | Can Read Metadata |
 | :- | :- | :- |
@@ -17,18 +30,6 @@ To do: come up with better name than audio
 | WAV | Yes | No |
 | WMA | No | No |
 
-## My Supported Formats
-| Container | Can Play | Can Read Metadata |
-| :- | :- | :- |
-| AAC | No | No |
-| AIF(F) | No | No |
-| Mp3 | No | Yes |
-| Mp4 | No | No |
-| M4A | No | No |
-| FLAC | No | Yes |
-| OGG| No | No |
-| WAV | No | No |
-| WMA | No | No |
 # Resources
 One problem I have run into during the course of this project has been finding sample files. Formats like MP3 are easy enough to come by, but I have never actually encountered an AIF, OGG, or AAC file in the wild before. 
 

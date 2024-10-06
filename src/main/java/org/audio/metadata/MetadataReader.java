@@ -43,6 +43,9 @@ public abstract class MetadataReader {
 			case FLAC:
 				reader = new FLACReader();
 				break;
+			case WAV:
+				reader = new WAVEReader();
+				break;
 			default:
 				throw new IllegalArgumentException("Unrecognized file format");
 		}

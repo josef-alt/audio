@@ -179,13 +179,15 @@ public class ID3TagReader extends MetadataReader {
 						tag = ID3_TAGS.get(tag);
 					}
 
-					// eliminate preceding and succeeding zeros
+					// eliminate preceding and succeeding non-characters
+					// v2.3 has optional leading zeros, but they are 3's in v2.4
+					// for now I am just going to eliminate anything before 32 (space)
 					int offset = 0;
-					while (offset < frameData.length && frameData[offset] == 0) {
+					while (offset < frameData.length && frameData[offset] < 32) {
 						offset++;
 					}
 					int length = frameData.length;
-					while (length > 0 && frameData[length - 1] == 0) {
+					while (length > 0 && frameData[length - 1] < 32) {
 						length--;
 					}
 

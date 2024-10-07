@@ -3,6 +3,7 @@ package org.audio.metadata;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
+import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.Arrays;
@@ -179,24 +180,31 @@ public class ID3TagReader extends MetadataReader {
 						tag = ID3_TAGS.get(tag);
 					}
 
-					// eliminate preceding and succeeding non-characters
-					// v2.3 has optional leading zeros, but they are 3's in v2.4
-					// for now I am just going to eliminate anything before 32 (space)
-					int offset = 0;
-					while (offset < frameData.length && frameData[offset] < 32) {
-						offset++;
-					}
-					int length = frameData.length;
-					while (length > 0 && frameData[length - 1] < 32) {
-						length--;
-					}
-
 					// TODO: ID3 allows multiple PRIV tags but this will only show the last one
 					// TODO: COMR commercial frame allows image/png and image/jpeg
 					if (tag.equals(ID3_TAGS.get("APIC"))) {
 						metadata.addImage(extractImage(frameData));
 					} else {
-						metadata.addTextField(tag, new String(frameData, offset, length - offset));
+						String value = new String(frameData);
+						// character encoding
+						if (frameData.length > 0) {
+							switch (frameData[0]) {
+								case 0:
+									// ISO 8859 1
+									value = new String(frameData, 1, frameData.length - 2);
+									break;
+								case 1:
+									// UTF 16 BOM
+								case 2:
+									// UTF 16 without BOM
+								case 3:
+									// UTF 8
+									value = new String(frameData, 1, frameData.length - 2, Charset.forName("UTF-8"));
+									break;
+							}
+						}
+
+						metadata.addTextField(tag, value);
 					}
 				}
 			}

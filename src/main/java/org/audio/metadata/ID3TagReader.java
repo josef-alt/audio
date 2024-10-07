@@ -245,9 +245,9 @@ public class ID3TagReader extends MetadataReader {
 	 * ID3v2.3: 32 bits
 	 * ID3V2.4: 28 bits where the first bit of each octet is ignored
 	 * 
-	 * @param bytes
-	 * @param version
-	 * @return
+	 * @param bytes   four byte array representing one integer
+	 * @param dropMSB true if the first bit of each byte is to be ignored
+	 * @return the 32 bit integer represented by {@code bytes}
 	 */
 	private int convertBytesToInt(byte[] bytes, boolean dropMSB) {
 		int size = 0;
@@ -288,9 +288,10 @@ public class ID3TagReader extends MetadataReader {
 	}
 
 	/**
+	 * Extract embedded images from byte array
 	 * 
 	 * @param data full ID3 frame containing header, mime type, and image data
-	 * @return
+	 * @return CoverArt instance corresponding to given array
 	 */
 	private CoverArt extractImage(byte[] data) {
 		// TODO: jpeg support

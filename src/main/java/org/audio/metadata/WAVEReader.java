@@ -18,7 +18,6 @@ public class WAVEReader extends MetadataReader {
 	/**
 	 * Reads metadata from given wave files
 	 * 
-	 * @param source path to audio file
 	 * @return metadata in key-value pairs
 	 */
 	public Metadata getMetadata() {

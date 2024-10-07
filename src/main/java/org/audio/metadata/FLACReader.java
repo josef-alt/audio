@@ -34,7 +34,6 @@ public class FLACReader extends MetadataReader {
 	/**
 	 * Reads metadata from given flac files
 	 * 
-	 * @param source path to audio file
 	 * @return metadata in key-value pairs
 	 */
 	public Metadata getMetadata() {

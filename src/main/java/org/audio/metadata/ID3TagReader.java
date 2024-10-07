@@ -114,7 +114,6 @@ public class ID3TagReader extends MetadataReader {
 	/**
 	 * Reads ID3 tags from given MP3 files
 	 * 
-	 * @param source path to audio file
 	 * @return metadata in key-value pairs
 	 */
 	public Metadata getMetadata() {

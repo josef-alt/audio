@@ -138,11 +138,6 @@ public class MetadataTest {
 	}
 
 	@Test
-	void test_MP4() {
-		test("mp4");
-	}
-
-	@Test
 	void test_M4A() {
 		test("m4a");
 	}

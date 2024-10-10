@@ -1,6 +1,6 @@
 package audio;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -124,26 +124,26 @@ public class MetadataTest {
 
 	@Test
 	void test_AAC() {
-		test("aac");
+		assertThrows(IllegalArgumentException.class, () -> test("aac"));
 	}
 
 	@Test
 	void test_AIF() {
-		test("aif");
+		assertThrows(IllegalArgumentException.class, () -> test("aif"));
 	}
 
 	@Test
 	void test_OGG() {
-		test("ogg");
+		assertThrows(IllegalArgumentException.class, () -> test("ogg"));
 	}
 
 	@Test
 	void test_M4A() {
-		test("m4a");
+		assertThrows(IllegalArgumentException.class, () -> test("m4a"));
 	}
 
 	@Test
 	void test_WMA() {
-		test("wma");
+		assertThrows(IllegalArgumentException.class, () -> test("wma"));
 	}
 }

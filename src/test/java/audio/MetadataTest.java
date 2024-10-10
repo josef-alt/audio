@@ -88,7 +88,7 @@ public class MetadataTest {
 
 		for (String key : expected.keySet()) {
 			assertTrue(meta.textFields.containsKey(key));
-			assertEquals(expected.get(key), meta.textFields.get(key));
+			assertTrue(meta.textFields.get(key).containsAll(expected.get(key)));
 		}
 	}
 

@@ -140,8 +140,21 @@ public class ID3TagReader extends MetadataReader {
 			int nRead = channel.read(buffer);
 			buffer.flip();
 
-			int id3_length = getSizeFromHeader(buffer);
 			int id3_version = buffer.get(3);
+			int id3_revision = buffer.get(4);
+			int id3_flags = buffer.get(5);
+			int id3_length = getSizeFromHeader(buffer);
+
+			boolean extendedHeader = (id3_flags & (1 << 6)) != 0;
+			if (extendedHeader) {
+				// the extended header does not provide much useful information
+				nRead = channel.read(buffer);
+				buffer.flip();
+
+				int ext_size = buffer.getInt();
+				int ext_flags = buffer.getChar();
+				int ext_padding = buffer.getInt();
+			}
 
 			// reading all frames
 			// TODO break into chunks

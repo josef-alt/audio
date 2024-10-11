@@ -207,8 +207,25 @@ public class ID3TagReader extends MetadataReader {
 									break;
 								case 1:
 									// UTF 16 BOM
+									// 0xFFFE = little endian
+									// 0xFEFF = big endian
+									boolean bigEndian = (frameData[1] & 0xFF) == 0xFE && (frameData[2] & 0xFF) == 0xFF;
+									if (bigEndian) {
+										// skip encoding flag and two byte BOM, cut off null terminator
+										value = new String(frameData, 3, size - 5, StandardCharsets.UTF_16BE);
+									} else {
+										// skip encoding flag and two byte BOM, cut off null terminator
+										value = new String(frameData, 3, size - 5, StandardCharsets.UTF_16LE);
+									}
+									break;
 								case 2:
 									// UTF 16 without BOM
+									// given StandardCharsets.UTF_16's behavior, I could just combine cases 1 & 2
+									// for now I will leave them separate for clarity
+
+									// skip encoding flag, cut off null terminator
+									value = new String(frameData, 1, size - 3, StandardCharsets.UTF_16);
+									break;
 								case 3:
 									// UTF 8
 									value = new String(frameData, 1, frameData.length - 2, StandardCharsets.UTF_8);

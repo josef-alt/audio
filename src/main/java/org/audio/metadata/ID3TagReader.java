@@ -3,7 +3,7 @@ package org.audio.metadata;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.Arrays;
@@ -211,7 +211,7 @@ public class ID3TagReader extends MetadataReader {
 									// UTF 16 without BOM
 								case 3:
 									// UTF 8
-									value = new String(frameData, 1, frameData.length - 2, Charset.forName("UTF-8"));
+									value = new String(frameData, 1, frameData.length - 2, StandardCharsets.UTF_8);
 									break;
 							}
 						}

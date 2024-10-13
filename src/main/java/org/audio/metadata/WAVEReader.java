@@ -44,6 +44,30 @@ public class WAVEReader extends MetadataReader {
 			int nRead = channel.read(buffer);
 			buffer.flip();
 
+			byte[] riffMarker = new byte[4];
+			buffer.get(riffMarker);
+
+			int fileSize = buffer.getInt();
+
+			byte[] waveMarker = new byte[4];
+			buffer.get(waveMarker);
+
+			byte[] fmtMarker = new byte[4];
+			buffer.get(fmtMarker);
+
+			int fmtLength = buffer.getInt();
+			short fmtType = buffer.getShort();
+			short numChannels = buffer.getShort();
+			int sampleRate = buffer.getInt();
+			int sampleData = buffer.getInt();
+			short monoStereoFlag = buffer.getShort();
+			short bitsPerSample = buffer.getShort();
+
+			byte[] dataMarker = new byte[4];
+			buffer.get(dataMarker);
+
+			int dataSize = buffer.getInt();
+
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -17,6 +17,11 @@ public class WAVEReader extends MetadataReader {
 	private static int WAVE_HEADER_SIZE = 44;
 
 	/**
+	 * Each RIFF chunk contains a 4 byte tag followed by a 4 byte size
+	 */
+	private static int CHUNK_HEADER_SIZE = 8;
+
+	/**
 	 * Reads metadata from given wave files
 	 * 
 	 * @return metadata in key-value pairs
@@ -69,6 +74,38 @@ public class WAVEReader extends MetadataReader {
 			buffer.get(dataMarker);
 
 			int dataSize = buffer.getInt();
+
+			// skip over data portion
+			long position = channel.position();
+			channel.position(position + dataSize);
+
+			// read optional chunks
+			buffer = ByteBuffer.allocate(CHUNK_HEADER_SIZE);
+			buffer.order(ByteOrder.LITTLE_ENDIAN);
+			while (channel.read(buffer) == CHUNK_HEADER_SIZE) {
+				buffer.flip();
+
+				byte[] fourCC = new byte[4];
+				buffer.get(fourCC);
+				int chunkSize = buffer.getInt();
+
+				ByteBuffer chunkBuffer = ByteBuffer.allocate(chunkSize);
+				nRead = channel.read(chunkBuffer);
+				if ((fourCC[0] & 0xFF) == 0x4C && (fourCC[1] & 0xFF) == 0x49 && (fourCC[2] & 0xFF) == 0x53
+						&& (fourCC[3] & 0xFF) == 0x54) {
+					// LIST block
+					System.err.printf("Unimplemented: %s%n", new String(fourCC));
+				} else if ((fourCC[0] & 0xFF) == 0x69 && (fourCC[1] & 0xFF) == 0x64 && (fourCC[2] & 0xFF) == 0x33
+						&& (fourCC[3] & 0xFF) == 0x20) {
+					// id3 block
+					System.err.printf("Unimplemented: %s%n", new String(fourCC));
+				} else {
+					// unsupported block
+					System.err.printf("Unsupported block type: %s%n", new String(fourCC));
+				}
+
+				buffer.clear();
+			}
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

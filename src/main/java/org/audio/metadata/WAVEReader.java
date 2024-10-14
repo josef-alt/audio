@@ -2,6 +2,7 @@ package org.audio.metadata;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.nio.channels.FileChannel;
 import java.nio.file.StandardOpenOption;
 
@@ -41,6 +42,7 @@ public class WAVEReader extends MetadataReader {
 			 * 4-byte length of data chunk
 			 */
 			ByteBuffer buffer = ByteBuffer.allocate(WAVE_HEADER_SIZE);
+			buffer.order(ByteOrder.LITTLE_ENDIAN);
 			int nRead = channel.read(buffer);
 			buffer.flip();
 

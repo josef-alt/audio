@@ -14,12 +14,12 @@ public class WAVEReader extends MetadataReader {
 	/**
 	 * WAVE format specifies 44 byte file header
 	 */
-	private static int WAVE_HEADER_SIZE = 44;
+	private static final int WAVE_HEADER_SIZE = 44;
 
 	/**
 	 * Each RIFF chunk contains a 4 byte tag followed by a 4 byte size
 	 */
-	private static int CHUNK_HEADER_SIZE = 8;
+	private static final int CHUNK_HEADER_SIZE = 8;
 
 	/**
 	 * Reads metadata from given wave files

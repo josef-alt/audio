@@ -11,8 +11,8 @@ import java.util.Map;
 
 public class FLACReader extends MetadataReader {
 
-	private static int FLAC_HEADER_SIZE = 4;
-	private static int BLOCK_HEADER_SIZE = 4;
+	private static final int FLAC_HEADER_SIZE = 4;
+	private static final int BLOCK_HEADER_SIZE = 4;
 	private static final Map<String, String> VORBIS_TAGS;
 	static {
 		Map<String, String> tags = new HashMap<>();

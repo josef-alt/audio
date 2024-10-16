@@ -104,6 +104,7 @@ public class ID3TagReader extends MetadataReader {
 	private static final byte[] MIME_IMAGE_PNG = "png".getBytes();
 	private static final byte[] PNG_HEADER = { (byte) 0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A };
 	private static final byte[] PNG_FOOTER = { 0x49, 0x45, 0x4E, 0x44, (byte) 0xAE, 0x42, 0x60, (byte) 0x82 };
+	private static final byte[] MIME_IMAGE_JPEG = "jpeg".getBytes();
 
 	/**
 	 * Standard ID3v2 has a 10 byte header
@@ -340,6 +341,12 @@ public class ID3TagReader extends MetadataReader {
 		for (int idx = 0; idx < data.length; ++idx) {
 			if (prefixMatches(data, idx, MIME_IMAGE_PNG)) {
 				subType = "png";
+			} else if (prefixMatches(data, idx, MIME_IMAGE_JPEG)) {
+				// skip 'jpeg', separator, picture type, separator
+				imageStart = idx + 7;
+				subType = "jpeg";
+
+				break;
 			}
 
 			if (subType.equals("png")) {

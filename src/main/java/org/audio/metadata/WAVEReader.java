@@ -97,7 +97,7 @@ public class WAVEReader extends MetadataReader {
 				if ((fourCC[0] & 0xFF) == 0x4C && (fourCC[1] & 0xFF) == 0x49 && (fourCC[2] & 0xFF) == 0x53
 						&& (fourCC[3] & 0xFF) == 0x54) {
 					// LIST block
-					System.err.printf("Unimplemented: %s%n", new String(fourCC));
+					parseListChunk(chunkBuffer, metadata);
 				} else if ((fourCC[0] & 0xFF) == 0x69 && (fourCC[1] & 0xFF) == 0x64 && (fourCC[2] & 0xFF) == 0x33
 						&& (fourCC[3] & 0xFF) == 0x20) {
 					// id3 block
@@ -116,6 +116,41 @@ public class WAVEReader extends MetadataReader {
 		}
 
 		return metadata;
+	}
+
+	/**
+	 * Parse LIST chunk for metadata
+	 *
+	 * @param chunkBuffer byte buffer containing list chunk
+	 * @param metadata    instance to be populated
+	 */
+	private void parseListChunk(ByteBuffer chunkBuffer, Metadata metadata) {
+		if (chunkBuffer.remaining() > 4) {
+			byte[] listType = new byte[4];
+			chunkBuffer.get(listType);
+
+			// check for INFO chunk
+		}
+
+		while (chunkBuffer.hasRemaining()) {
+			byte[] fourCC = new byte[4];
+			chunkBuffer.get(fourCC);
+
+			int size = chunkBuffer.getInt();
+			byte[] data = new byte[size];
+			chunkBuffer.get(data);
+			metadata.addTextField(new String(fourCC), new String(data, 0, size - 1));
+
+			if (chunkBuffer.hasRemaining()) {
+				// TODO: figure out why some list elements have an extra 0
+				byte next = chunkBuffer.get();
+				if (next == 0x00) {
+					// Skip a byte
+				} else {
+					chunkBuffer.position(chunkBuffer.position() - 1);
+				}
+			}
+		}
 	}
 
 }

@@ -5,6 +5,9 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.channels.FileChannel;
 import java.nio.file.StandardOpenOption;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Read metadata from audio files according to wave specifications.
@@ -20,6 +23,22 @@ public class WAVEReader extends MetadataReader {
 	 * Each RIFF chunk contains a 4 byte tag followed by a 4 byte size
 	 */
 	private static final int CHUNK_HEADER_SIZE = 8;
+
+	// some common tags and their meanings
+	private static final Map<String, String> WAV_TAGS;
+	static {
+		Map<String, String> tags = new HashMap<>();
+		tags.put("IARL", "Official audio file webpage");
+		tags.put("IART", "Original artist(s)");
+		tags.put("ICOP", "Copyright/Legal information");
+		tags.put("ICRD", "Year");
+		tags.put("IGNR", "Content type");
+		tags.put("INAM", "Song Title");
+		tags.put("IPRD", "Album Title");
+		tags.put("ISFT", "Software/Hardware and settings used for encoding");
+
+		WAV_TAGS = Collections.unmodifiableMap(tags);
+	}
 
 	/**
 	 * Reads metadata from given wave files
@@ -139,7 +158,13 @@ public class WAVEReader extends MetadataReader {
 			int size = chunkBuffer.getInt();
 			byte[] data = new byte[size];
 			chunkBuffer.get(data);
-			metadata.addTextField(new String(fourCC), new String(data, 0, size - 1));
+
+			// convert from four byte character code to standard name, if possible
+			String key = new String(fourCC);
+			if (WAV_TAGS.containsKey(key)) {
+				key = WAV_TAGS.get(key);
+			}
+			metadata.addTextField(key, new String(data, 0, size - 1));
 
 			if (chunkBuffer.hasRemaining()) {
 				// TODO: figure out why some list elements have an extra 0

@@ -90,7 +90,10 @@ public class WAVEReader extends MetadataReader {
 				int chunkSize = buffer.getInt();
 
 				ByteBuffer chunkBuffer = ByteBuffer.allocate(chunkSize);
+				chunkBuffer.order(ByteOrder.LITTLE_ENDIAN);
 				nRead = channel.read(chunkBuffer);
+				chunkBuffer.flip();
+
 				if ((fourCC[0] & 0xFF) == 0x4C && (fourCC[1] & 0xFF) == 0x49 && (fourCC[2] & 0xFF) == 0x53
 						&& (fourCC[3] & 0xFF) == 0x54) {
 					// LIST block

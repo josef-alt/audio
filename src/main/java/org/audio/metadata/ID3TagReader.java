@@ -265,7 +265,7 @@ public class ID3TagReader extends MetadataReader {
 	 * @param buffer first {@code HEADER_SIZE} bytes of source file
 	 * @return number of bytes used by ID3 tags
 	 */
-	private int getSizeFromHeader(ByteBuffer buffer) {
+	private static int getSizeFromHeader(ByteBuffer buffer) {
 		buffer.position(6);
 		byte[] data = new byte[4];
 		buffer.get(data);
@@ -287,7 +287,7 @@ public class ID3TagReader extends MetadataReader {
 	 * @param dropMSB true if the first bit of each byte is to be ignored
 	 * @return the 32 bit integer represented by {@code bytes}
 	 */
-	private int convertBytesToInt(byte[] bytes, boolean dropMSB) {
+	private static int convertBytesToInt(byte[] bytes, boolean dropMSB) {
 		int size = 0;
 
 		if (dropMSB) {
@@ -313,7 +313,7 @@ public class ID3TagReader extends MetadataReader {
 	 * @param query search term
 	 * @return true if {@code query} is found at {@code index}
 	 */
-	private boolean prefixMatches(byte[] data, int index, byte[] query) {
+	private static boolean prefixMatches(byte[] data, int index, byte[] query) {
 		int offset = 0;
 
 		for (; offset < query.length; offset++) {
@@ -331,7 +331,7 @@ public class ID3TagReader extends MetadataReader {
 	 * @param data full ID3 frame containing header, mime type, and image data
 	 * @return CoverArt instance corresponding to given array
 	 */
-	private CoverArt extractImage(byte[] data) {
+	private static CoverArt extractImage(byte[] data) {
 		// TODO: jpeg support
 		String mimeType = "image/";
 		String subType = "";

@@ -137,6 +137,22 @@ public class ID3TagReader extends MetadataReader {
 	 */
 	private void ID3v2(Path source, Metadata metadata) {
 		try (FileChannel channel = FileChannel.open(source, StandardOpenOption.READ)) {
+			extractID3v2Data(channel, metadata);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Loads {@code metadata} with tags found in {@code source} based on ID3v2.
+	 * Logic extracted from above ID3v2
+	 * 
+	 * @param channel mp3 file channel
+	 * @param metadata    instance to be populated with data
+	 */
+	public static void extractID3v2Data(FileChannel channel, Metadata metadata) {
+		try {
 			ByteBuffer buffer = ByteBuffer.allocate(HEADER_SIZE);
 			int nRead = channel.read(buffer);
 			buffer.flip();

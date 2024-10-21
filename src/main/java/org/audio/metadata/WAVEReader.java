@@ -108,14 +108,17 @@ public class WAVEReader extends MetadataReader {
 				buffer.get(fourCC);
 				int chunkSize = buffer.getInt();
 
-				ByteBuffer chunkBuffer = ByteBuffer.allocate(chunkSize);
-				chunkBuffer.order(ByteOrder.LITTLE_ENDIAN);
-				nRead = channel.read(chunkBuffer);
-				chunkBuffer.flip();
+
 
 				if ((fourCC[0] & 0xFF) == 0x4C && (fourCC[1] & 0xFF) == 0x49 && (fourCC[2] & 0xFF) == 0x53
 						&& (fourCC[3] & 0xFF) == 0x54) {
 					// LIST block
+
+					ByteBuffer chunkBuffer = ByteBuffer.allocate(chunkSize);
+					chunkBuffer.order(ByteOrder.LITTLE_ENDIAN);
+					nRead = channel.read(chunkBuffer);
+					chunkBuffer.flip();
+
 					parseListChunk(chunkBuffer, metadata);
 				} else if ((fourCC[0] & 0xFF) == 0x69 && (fourCC[1] & 0xFF) == 0x64 && (fourCC[2] & 0xFF) == 0x33
 						&& (fourCC[3] & 0xFF) == 0x20) {
@@ -151,7 +154,7 @@ public class WAVEReader extends MetadataReader {
 			// check for INFO chunk
 		}
 
-		while (chunkBuffer.hasRemaining()) {
+		while (chunkBuffer.remaining() > 8) {
 			byte[] fourCC = new byte[4];
 			chunkBuffer.get(fourCC);
 

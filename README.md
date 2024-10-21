@@ -14,7 +14,7 @@ To do: come up with better name than audio
 | M4A | No | No |
 | FLAC | No | Yes |
 | OGG| No | No |
-| WAV | No | No |
+| WAV | No | Yes |
 | WMA | No | No |
 
 ## JavaFX Supported Formats

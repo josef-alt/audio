@@ -123,7 +123,7 @@ public class WAVEReader extends MetadataReader {
 				} else if ((fourCC[0] & 0xFF) == 0x69 && (fourCC[1] & 0xFF) == 0x64 && (fourCC[2] & 0xFF) == 0x33
 						&& (fourCC[3] & 0xFF) == 0x20) {
 					// id3 block
-					System.err.printf("Unimplemented: %s%n", new String(fourCC));
+					ID3TagReader.extractID3v2Data(channel, metadata);
 				} else {
 					// unsupported block
 					System.err.printf("Unsupported block type: %s%n", new String(fourCC));

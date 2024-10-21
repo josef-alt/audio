@@ -56,7 +56,7 @@ public class CoverArtTest {
 	 * @param filePath relative path to test file.
 	 */
 	@ParameterizedTest
-	@ValueSource(strings = { "flac/mb with jpg.flac", "mp3/sample with jpg.mp3" })
+	@ValueSource(strings = { "flac/mb with jpg.flac", "mp3/sample with jpg.mp3", "wav/sample2.WAV" })
 	void test_mbJPG(String filePath) {
 		AudioFile af = new AudioFile(Path.of(testDirectory, filePath));
 		List<CoverArt> cover = af.getMetadata().images;
@@ -75,7 +75,7 @@ public class CoverArtTest {
 	 * @param filePath relative path to test file.
 	 */
 	@ParameterizedTest
-	@ValueSource(strings = { "flac/mb with png.flac", "mp3/sample with png.mp3" })
+	@ValueSource(strings = { "flac/mb with png.flac", "mp3/sample with png.mp3", "wav/sample3.WAV" })
 	void test_mbPNG(String filePath) {
 		AudioFile af = new AudioFile(Path.of(testDirectory, filePath));
 		List<CoverArt> cover = af.getMetadata().images;

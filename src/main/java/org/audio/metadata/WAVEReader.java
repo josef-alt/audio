@@ -108,8 +108,6 @@ public class WAVEReader extends MetadataReader {
 				buffer.get(fourCC);
 				int chunkSize = buffer.getInt();
 
-
-
 				if ((fourCC[0] & 0xFF) == 0x4C && (fourCC[1] & 0xFF) == 0x49 && (fourCC[2] & 0xFF) == 0x53
 						&& (fourCC[3] & 0xFF) == 0x54) {
 					// LIST block

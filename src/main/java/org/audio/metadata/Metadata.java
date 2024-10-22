@@ -12,7 +12,16 @@ import java.util.Map;
 public class Metadata {
 
 	/**
-	 * TODO: This needs some work, most text fields cannot have multiple entries
+	 * TODO: This needs some work, most text fields cannot have multiple entries.
+	 * 
+	 * <p>
+	 * Reading WAV files introduced a new 'problem' where all text fields were
+	 * represented twice (once in the INFO block, and once in an ID3 block).
+	 * To avoid this, I could use a Set, but that would not maintain order.
+	 * I could use a {@link java.util.LinkedHashSet}, but most tags can only appear
+	 * once, so most of the lists should only have one element, which makes a
+	 * LinkedHashSet seem like overkill. For now, I will just use {@link List}.
+	 * </p>
 	 */
 	public Map<String, List<String>> textFields;
 	public List<CoverArt> images;
@@ -30,7 +39,16 @@ public class Metadata {
 	 * @param value text field's value
 	 */
 	public void addTextField(String tag, String value) {
-		textFields.putIfAbsent(tag, new ArrayList<>());
+		// make sure that there are no duplicate entries
+		if (textFields.containsKey(tag)) {
+			if (textFields.get(tag).contains(value)) {
+				return;
+			}
+		} else {
+			textFields.put(tag, new ArrayList<>());
+		}
+
+		// add value to map if duplicate was not found
 		textFields.get(tag).add(value);
 	}
 

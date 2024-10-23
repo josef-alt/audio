@@ -28,14 +28,14 @@ public class WAVEReader extends MetadataReader {
 	private static final Map<String, String> WAV_TAGS;
 	static {
 		Map<String, String> tags = new HashMap<>();
-		tags.put("IARL", "Official audio file webpage");
-		tags.put("IART", "Original artist(s)");
-		tags.put("ICOP", "Copyright/Legal information");
-		tags.put("ICRD", "Year");
-		tags.put("IGNR", "Content type");
-		tags.put("INAM", "Song Title");
-		tags.put("IPRD", "Album Title");
-		tags.put("ISFT", "Software/Hardware and settings used for encoding");
+		tags.put("IARL", Constants.FILE_WEBPAGE);
+		tags.put("IART", Constants.ARTIST_NAME);
+		tags.put("ICOP", Constants.COPYRIGHT);
+		tags.put("ICRD", Constants.YEAR);
+		tags.put("IGNR", Constants.GENRE);
+		tags.put("INAM", Constants.TITLE);
+		tags.put("IPRD", Constants.ALBUM_NAME);
+		tags.put("ISFT", Constants.ENCODING_INFO);
 
 		WAV_TAGS = Collections.unmodifiableMap(tags);
 	}

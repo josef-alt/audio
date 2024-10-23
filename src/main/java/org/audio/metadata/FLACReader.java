@@ -20,14 +20,14 @@ public class FLACReader extends MetadataReader {
 		// there is no official standard set of tags
 		// below are some of the proposed tags matched to the corresponding
 		// description used in ID3TagReader
-		tags.put("TITLE", "Song Title");
-		tags.put("ALBUM", "Album title");
-		tags.put("TRACKNUMBER", "Track number");
-		tags.put("ARTIST", "Lead performer(s)");
-		tags.put("COPYRIGHT", "Copyright/Legal information");
-		tags.put("GENRE", "Content type");
-		tags.put("DATE", "Date");
-		tags.put("ISRC", "international standard recording code");
+		tags.put("TITLE", Constants.TITLE);
+		tags.put("ALBUM", Constants.ALBUM_NAME);
+		tags.put("TRACKNUMBER", Constants.TRACK_NUMBER);
+		tags.put("ARTIST", Constants.ARTIST_NAME);
+		tags.put("COPYRIGHT", Constants.COPYRIGHT);
+		tags.put("GENRE", Constants.GENRE);
+		tags.put("DATE", Constants.DATE);
+		tags.put("ISRC", Constants.ISRC);
 		VORBIS_TAGS = Collections.unmodifiableMap(tags);
 	}
 

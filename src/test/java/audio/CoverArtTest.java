@@ -51,13 +51,13 @@ public class CoverArtTest {
 	}
 
 	/**
-	 * Testing files that have mb.jpg as their cover art
+	 * Extract's the first image found in {@code filePath} and compares it to
+	 * the pre-loaded {@code expectedImage}.
 	 * 
-	 * @param filePath relative path to test file.
+	 * @param fileName      path to test case
+	 * @param expectedImage name of expected cover art
 	 */
-	@ParameterizedTest
-	@ValueSource(strings = { "flac/mb with jpg.flac", "mp3/sample with jpg.mp3", "wav/sample2.WAV" })
-	void test_mbJPG(String filePath) {
+	private void testCoverArt(String filePath, String expectedImage) {
 		AudioFile af = new AudioFile(Path.of(testDirectory, filePath));
 		List<CoverArt> cover = af.getMetadata().images;
 
@@ -66,7 +66,18 @@ public class CoverArtTest {
 		}
 
 		byte[] extracted = cover.get(0).getBinaryData();
-		assertArrayEquals(expected.get("mb.jpg"), extracted);
+		assertArrayEquals(expected.get(expectedImage), extracted);
+	}
+
+	/**
+	 * Testing files that have mb.jpg as their cover art
+	 * 
+	 * @param filePath relative path to test file.
+	 */
+	@ParameterizedTest
+	@ValueSource(strings = { "flac/mb with jpg.flac", "mp3/sample with jpg.mp3", "wav/sample2.WAV" })
+	void test_mbJPG(String filePath) {
+		testCoverArt(filePath, "mb.jpg");
 	}
 
 	/**
@@ -77,14 +88,6 @@ public class CoverArtTest {
 	@ParameterizedTest
 	@ValueSource(strings = { "flac/mb with png.flac", "mp3/sample with png.mp3", "wav/sample3.WAV" })
 	void test_mbPNG(String filePath) {
-		AudioFile af = new AudioFile(Path.of(testDirectory, filePath));
-		List<CoverArt> cover = af.getMetadata().images;
-
-		if (cover.isEmpty()) {
-			fail("No cover art found");
-		}
-
-		byte[] extracted = cover.get(0).getBinaryData();
-		assertArrayEquals(expected.get("mb.png"), extracted);
+		testCoverArt(filePath, "mb.png");
 	}
 }

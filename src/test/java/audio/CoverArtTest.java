@@ -90,4 +90,15 @@ public class CoverArtTest {
 	void test_mbPNG(String filePath) {
 		testCoverArt(filePath, "mb.png");
 	}
+
+	/**
+	 * Testing files that have mb.webp as their cover art
+	 * 
+	 * @param filePath relative path to test file.
+	 */
+	@ParameterizedTest
+	@ValueSource(strings = { "flac/mb with webp.flac", "mp3/sample with webp.mp3", "wav/sample1.WAV" })
+	void test_mbWEBP(String filePath) {
+		testCoverArt(filePath, "mb.webp");
+	}
 }

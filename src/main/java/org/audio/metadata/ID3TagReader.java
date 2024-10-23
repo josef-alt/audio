@@ -105,6 +105,7 @@ public class ID3TagReader extends MetadataReader {
 	private static final byte[] PNG_HEADER = { (byte) 0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A };
 	private static final byte[] PNG_FOOTER = { 0x49, 0x45, 0x4E, 0x44, (byte) 0xAE, 0x42, 0x60, (byte) 0x82 };
 	private static final byte[] MIME_IMAGE_JPEG = "jpeg".getBytes();
+	private static final byte[] MIME_IMAGE_WEBP = "webp".getBytes();
 
 	/**
 	 * Standard ID3v2 has a 10 byte header
@@ -363,8 +364,17 @@ public class ID3TagReader extends MetadataReader {
 				subType = "jpeg";
 
 				break;
+			} else if (prefixMatches(data, idx, MIME_IMAGE_WEBP)) {
+				// skip 'webp', separator, picture type, separator
+				// TODO: can probably combine any mime types that don't have additional
+				// header/footer checks necessary
+				imageStart = idx + 7;
+				subType = "webp";
+
+				break;
 			}
 
+			// PNG is the only mime type that has additional checks needed (so far)
 			if (subType.equals("png")) {
 				if (prefixMatches(data, idx, PNG_HEADER)) {
 					imageStart = idx;

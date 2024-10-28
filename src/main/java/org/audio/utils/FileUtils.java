@@ -16,7 +16,7 @@ public class FileUtils {
 	 */
 	public enum Format {
 		// TODO other common formats
-		MP3, MP4, M4A, WAV, WMA, FLAC, OGG, UNKNOWN;
+		MP3, MP4, M4A, DASH, WAV, WMA, FLAC, OGG, UNKNOWN;
 	}
 
 	/**
@@ -85,11 +85,18 @@ public class FileUtils {
 				// ....ftypM4A ....
 				// M4A isomiso2..À]
 				return Format.M4A;
+			} else if ((header[8] & 0xFF) == 0x64 && (header[9] & 0xFF) == 0x61 && (header[10] & 0xFF) == 0x73
+					&& (header[11] & 0xFF) == 0x68) {
+				// Sample:
+				// ....ftypdash....
+				// iso6mp41...žmoov
+				return Format.DASH;
+			} else if ((header[8] & 0xFF) == 0x6D && (header[9] & 0xFF) == 0x70 && (header[10] & 0xFF) == 0x34) {
+				// Sample:
+				// ....ftypmp42....
+				// mp41isom..ßAmoov
+				return Format.MP4;
 			}
-
-			// Alternate Format Sample:
-			// ....ftypdash....
-			// iso6mp41...2moov
 		}
 		// WMA
 		else if ((header[0] & 0xFF) == 0x30 && (header[1] & 0xFF) == 0x26 && (header[2] & 0xFF) == 0xB2

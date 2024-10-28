@@ -1,7 +1,8 @@
-package org.audio.metadata;
+package org.audio.metadata.reader;
 
 import java.nio.file.Path;
 
+import org.audio.metadata.Metadata;
 import org.audio.utils.FileUtils;
 
 /**
@@ -46,6 +47,11 @@ public abstract class MetadataReader {
 			case WAV:
 				reader = new WAVEReader();
 				break;
+			case M4A:
+				reader = new M4AReader();
+				break;
+			case MP4:
+			case DASH:
 			default:
 				throw new IllegalArgumentException("Unrecognized file format");
 		}

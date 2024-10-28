@@ -1,4 +1,4 @@
-package org.audio.metadata;
+package org.audio.metadata.reader;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -8,6 +8,9 @@ import java.nio.file.StandardOpenOption;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.audio.metadata.Constants;
+import org.audio.metadata.Metadata;
 
 /**
  * Read metadata from audio files according to wave specifications.

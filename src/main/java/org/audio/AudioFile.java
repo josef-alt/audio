@@ -2,7 +2,7 @@ package org.audio;
 import java.nio.file.Path;
 
 import org.audio.metadata.Metadata;
-import org.audio.metadata.MetadataReader;
+import org.audio.metadata.reader.MetadataReader;
 
 public class AudioFile {
 	private Path source;

@@ -41,8 +41,7 @@ public class M4AReader extends MetadataReader{
 				if ((fourCC[0] & 0xFF) == 0x66 && (fourCC[1] & 0xFF) == 0x74 && (fourCC[2] & 0xFF) == 0x79
 						&& (fourCC[3] & 0xFF) == 0x70) {
 					// ftyp
-					// skip contents and move to next chunk
-					channel.position(channel.position() + chunkSize - CHUNK_HEADER_SIZE);
+					parseHeader(channel, chunkSize);
 				} else if ((fourCC[0] & 0xFF) == 0x66 && (fourCC[1] & 0xFF) == 0x72 && (fourCC[2] & 0xFF) == 0x65
 						&& (fourCC[3] & 0xFF) == 0x65) {
 					// free
@@ -69,5 +68,49 @@ public class M4AReader extends MetadataReader{
 		}
 
 		return metadata;
+	}
+
+	/**
+	 * Parse 'ftyp' chunk at start of m4a file.
+	 * 
+	 * <p>
+	 * Currently the data parsed by this function is not used or stored anywhere.
+	 * This function mainly serves to reposition {@code channel} without totally
+	 * disregarding the encountered structure. By implementing this I hope to
+	 * ensure that everything is being read properly, rather than just jumping to
+	 * the next expected position. Additionally, I might want to use this data at
+	 * some future point.
+	 * </p>
+	 * 
+	 * @param channel   channel to audio file in read mode
+	 * @param chunkSize number of bytes in the ftyp header including four-cc and
+	 *                  chunk size
+	 * @throws IOException if channel is inaccessible or buffer runs out of data
+	 *                     unexpectedly
+	 */
+	private static void parseHeader(FileChannel channel, int chunkSize) throws IOException {
+		int bytesToRead = chunkSize - CHUNK_HEADER_SIZE;
+		ByteBuffer chunkBuffer = ByteBuffer.allocate(bytesToRead);
+		if (channel.read(chunkBuffer) == bytesToRead) {
+			chunkBuffer.flip();
+
+			// four byte string representing the format
+			byte[] majorBrand = new byte[4];
+			chunkBuffer.get(majorBrand);
+
+			// this is a binary coded decimal
+			byte[] minorVersion = new byte[4];
+			chunkBuffer.get(minorVersion);
+
+			// unknown number of compatible brands
+			// bytesToRead - majorBrand.length - minorVersion.length bytes
+			// each compatible brand should be four bytes
+			int comptatibleCount = (bytesToRead - 8) / 4;
+			for (int c = 0; c < comptatibleCount; c++) {
+				byte[] compatible = new byte[4];
+				chunkBuffer.get(compatible);
+				// TODO: add to metadata?
+			}
+		}
 	}
 }

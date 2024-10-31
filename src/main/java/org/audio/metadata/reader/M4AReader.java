@@ -38,8 +38,19 @@ public class M4AReader extends MetadataReader{
 				byte[] fourCC = new byte[4];
 				buffer.get(fourCC);
 
-				System.out.println(new String(fourCC) + " for " + chunkSize + " bytes");
-				// TODO: parse contents
+				if ((fourCC[0] & 0xFF) == 0x66 && (fourCC[1] & 0xFF) == 0x74 && (fourCC[2] & 0xFF) == 0x79
+						&& (fourCC[3] & 0xFF) == 0x70) {
+					// ftyp
+				} else if ((fourCC[0] & 0xFF) == 0x66 && (fourCC[1] & 0xFF) == 0x72 && (fourCC[2] & 0xFF) == 0x65
+						&& (fourCC[3] & 0xFF) == 0x65) {
+					// free
+				} else if ((fourCC[0] & 0xFF) == 0x6D && (fourCC[1] & 0xFF) == 0x64 && (fourCC[2] & 0xFF) == 0x61
+						&& (fourCC[3] & 0xFF) == 0x74) {
+					// mdat
+				} else if ((fourCC[0] & 0xFF) == 0x6D && (fourCC[1] & 0xFF) == 0x6F && (fourCC[2] & 0xFF) == 0x6F
+						&& (fourCC[3] & 0xFF) == 0x76) {
+					// moov
+				}
 
 				// skip contents and move to next chunk
 				channel.position(channel.position() + chunkSize - CHUNK_HEADER_SIZE);

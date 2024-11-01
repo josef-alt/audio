@@ -55,8 +55,7 @@ public class M4AReader extends MetadataReader{
 				} else if ((fourCC[0] & 0xFF) == 0x6D && (fourCC[1] & 0xFF) == 0x6F && (fourCC[2] & 0xFF) == 0x6F
 						&& (fourCC[3] & 0xFF) == 0x76) {
 					// moov
-					// skip contents and move to next chunk
-					channel.position(channel.position() + chunkSize - CHUNK_HEADER_SIZE);
+					parseMOOV(channel, chunkSize, metadata);
 				}
 
 				buffer.clear();
@@ -111,6 +110,77 @@ public class M4AReader extends MetadataReader{
 				chunkBuffer.get(compatible);
 				// TODO: add to metadata?
 			}
+		}
+	}
+
+	/**
+	 * Helper function for parsing Movie (moov) chunk. This chunk contains player
+	 * information (duration, time scale, volume, rate, etc) and display
+	 * information (artist, title, etc).
+	 * 
+	 * @param channel   channel to audio file in read mode
+	 * @param chunkSize number of bytes in the moov block including the header
+	 * @param metadata  instance to be populated with extracted data
+	 * @throws IOException if channel is inaccessible or buffer runs out of data
+	 */
+	private void parseMOOV(FileChannel channel, int chunkSize, Metadata metadata) throws IOException {
+		int bytesToRead = chunkSize - CHUNK_HEADER_SIZE;
+		ByteBuffer chunkBuffer = ByteBuffer.allocate(bytesToRead);
+		if (channel.read(chunkBuffer) == bytesToRead) {
+			chunkBuffer.flip();
+
+			// read unknown number of sub-chunks
+			while (chunkBuffer.remaining() >= CHUNK_HEADER_SIZE) {
+				int size = chunkBuffer.getInt();
+				byte[] fourCC = new byte[4];
+				chunkBuffer.get(fourCC);
+
+				// look for user-data block
+				if ((fourCC[0] & 0xFF) == 0x75 && (fourCC[1] & 0xFF) == 0x64 && (fourCC[2] & 0xFF) == 0x74
+						&& (fourCC[3] & 0xFF) == 0x61) {
+					parseUserData(chunkBuffer, metadata);
+				} else {
+					System.out.println("skip " + new String(fourCC));
+					chunkBuffer.position(chunkBuffer.position() + size - CHUNK_HEADER_SIZE);
+				}
+			}
+		}
+	}
+
+	/**
+	 * Helper function for parsing user data (udta) chunk and extracting data to
+	 * populate {@code metadata} instance.
+	 * 
+	 * @param buffer   buffer containing entire chunk
+	 * @param metadata instance to be populated with metadata
+	 */
+	private void parseUserData(ByteBuffer buffer, Metadata metadata) {
+		// size of metadata block
+		int size = buffer.getInt();
+
+		// meta type
+		byte[] type = new byte[4];
+		buffer.get(type);
+
+		// sample offset table version
+		int version = buffer.get();
+
+		// offset table flags
+		int flags = buffer.get();
+		flags = (flags << 8) | buffer.get();
+		flags = (flags << 8) | buffer.get();
+
+		// parse unknown number of user data entries
+		while (buffer.remaining() >= CHUNK_HEADER_SIZE) {
+			size = buffer.getInt();
+			buffer.get(type);
+
+			// read entire entry into memory
+			byte[] data = new byte[size - CHUNK_HEADER_SIZE];
+			buffer.get(data);
+
+			// TODO: parse and store data appropriately
+			System.out.println(new String(data));
 		}
 	}
 }

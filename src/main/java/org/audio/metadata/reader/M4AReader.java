@@ -88,7 +88,7 @@ public class M4AReader extends MetadataReader{
 	 * @throws IOException if channel is inaccessible or buffer runs out of data
 	 *                     unexpectedly
 	 */
-	private static void parseHeader(FileChannel channel, int chunkSize) throws IOException {
+	private void parseHeader(FileChannel channel, int chunkSize) throws IOException {
 		int bytesToRead = chunkSize - CHUNK_HEADER_SIZE;
 		ByteBuffer chunkBuffer = ByteBuffer.allocate(bytesToRead);
 		if (channel.read(chunkBuffer) == bytesToRead) {

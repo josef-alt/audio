@@ -71,7 +71,7 @@ public final class Constants {
 	 */
 	public static final String COPYRIGHT = "Copyright";
 
-	/*
+	/**
 	 * International Standard Recording Code
 	 */
 	public static final String ISRC = "ISRC";
@@ -86,7 +86,7 @@ public final class Constants {
 	 */
 	public static final String PUBLISHER = "Publisher";
 
-	/*
+	/**
 	 * Official artist webpage
 	 */
 	public static final String ARTIST_WEBPAGE = "Artist Site";

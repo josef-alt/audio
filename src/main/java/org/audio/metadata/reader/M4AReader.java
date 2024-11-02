@@ -175,12 +175,36 @@ public class M4AReader extends MetadataReader{
 			size = buffer.getInt();
 			buffer.get(type);
 
-			// read entire entry into memory
-			byte[] data = new byte[size - CHUNK_HEADER_SIZE];
-			buffer.get(data);
+			// look for ilst block
+			if ((type[0] & 0xFF) == 0x69 && (type[1] & 0xFF) == 0x6C && (type[2] & 0xFF) == 0x73
+					&& (type[3] & 0xFF) == 0x74) {
+				int bytesToRead = size;
+				int bytesRead = CHUNK_HEADER_SIZE;
+				while (bytesRead < bytesToRead) {
+					size = buffer.getInt();
+					buffer.get(type);
 
-			// TODO: parse and store data appropriately
-			System.out.println(new String(data));
+					int length = buffer.getInt();
+					int dataMarker = buffer.getInt();
+
+					// skipping next 64 bits for now
+					buffer.getLong();
+
+					byte[] data = new byte[length - 16];
+					buffer.get(data);
+
+					// save user data to our metadata instance
+					metadata.addTextField(new String(type), new String(data));
+
+					// move to the next entry
+					bytesRead += size;
+				}
+			} else {
+				// TODO: handle other chunk types
+				byte[] data = new byte[size - CHUNK_HEADER_SIZE];
+				buffer.get(data);
+				System.out.println(new String(data));
+			}
 		}
 	}
 }

@@ -17,6 +17,11 @@ public final class Constants {
 	public static final String ARTIST_NAME = "Artist";
 
 	/**
+	 * Name of the artist as credited on the album
+	 */
+	public static final String ALBUM_ARTIST_NAME = "Album Artist";
+
+	/**
 	 * Name of the album
 	 */
 	public static final String ALBUM_NAME = "Album";

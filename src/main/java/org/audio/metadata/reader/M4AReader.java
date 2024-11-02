@@ -3,14 +3,39 @@ package org.audio.metadata.reader;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.StandardOpenOption;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
+import org.audio.metadata.Constants;
 import org.audio.metadata.Metadata;
 
 /**
  * Reads metadata from M4A files marked with ftypM4A
  */
 public class M4AReader extends MetadataReader{
+
+	/**
+	 * Mappings from M4A four character code tags to {@link Constants}.
+	 */
+	private static final Map<String, String> M4A_TAGS;
+	static {
+		Map<String, String> tags = new HashMap<>();
+		tags.put("\u00A9ART", Constants.ARTIST_NAME);
+		tags.put("aART", Constants.ALBUM_ARTIST_NAME);
+		tags.put("\u00A9alb", Constants.ALBUM_NAME);
+		tags.put("\u00A9wrt", Constants.COMPOSER);
+		tags.put("\u00A9nam", Constants.TITLE);
+		tags.put("trck", Constants.TRACK_NUMBER);
+		tags.put("disk", Constants.DISC_NUMBER);
+		tags.put("cprt", Constants.COPYRIGHT);
+		tags.put("\u00A9too", Constants.ENCODING_INFO);
+		tags.put("\u00A9day", Constants.YEAR);
+		tags.put("gnre", Constants.GENRE);
+		M4A_TAGS = Collections.unmodifiableMap(tags);
+	}
 
 	/**
 	 * Chunk headers are a four byte character code followed by four byte chunk size
@@ -194,7 +219,18 @@ public class M4AReader extends MetadataReader{
 					buffer.get(data);
 
 					// save user data to our metadata instance
-					metadata.addTextField(new String(type), new String(data));
+					// because many of the tags begin with 0xA9, we need to make sure to
+					// use a character encoding that will support this.
+					String key = new String(type, StandardCharsets.ISO_8859_1);
+					if (key.equals("covr")) {
+						// TODO: handle images
+					} else {
+						// convert four-cc to constant name
+						if (M4A_TAGS.containsKey(key)) {
+							key = M4A_TAGS.get(key);
+						}
+						metadata.addTextField(key, new String(data));
+					}
 
 					// move to the next entry
 					bytesRead += size;

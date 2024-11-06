@@ -6,16 +6,15 @@ import java.nio.channels.FileChannel;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.audio.metadata.Constants;
-import org.audio.metadata.CoverArt;
 import org.audio.metadata.Metadata;
 import org.audio.utils.FileUtils;
 import org.audio.utils.FileUtils.Format;
+import org.audio.utils.ImageExtractor;
 
 /**
  * Read metadata from audio files according to ID3v2 specifications.
@@ -102,13 +101,6 @@ public class ID3TagReader extends MetadataReader {
 		tags.put("WXXX", "User defined URL link frame");
 		ID3_TAGS = Collections.unmodifiableMap(tags);
 	}
-
-	// currently using png instead of image/png because mime type can be omitted
-	private static final byte[] MIME_IMAGE_PNG = "png".getBytes();
-	private static final byte[] PNG_HEADER = { (byte) 0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A };
-	private static final byte[] PNG_FOOTER = { 0x49, 0x45, 0x4E, 0x44, (byte) 0xAE, 0x42, 0x60, (byte) 0x82 };
-	private static final byte[] MIME_IMAGE_JPEG = "jpeg".getBytes();
-	private static final byte[] MIME_IMAGE_WEBP = "webp".getBytes();
 
 	/**
 	 * Standard ID3v2 has a 10 byte header
@@ -216,7 +208,7 @@ public class ID3TagReader extends MetadataReader {
 					// TODO: ID3 allows multiple PRIV tags but this will only show the last one
 					// TODO: COMR commercial frame allows image/png and image/jpeg
 					if (tag.equals(ID3_TAGS.get("APIC"))) {
-						metadata.addImage(extractImage(frameData));
+						metadata.addImage(ImageExtractor.extractImage(frameData));
 					} else {
 						String value = new String(frameData);
 						// character encoding
@@ -323,73 +315,5 @@ public class ID3TagReader extends MetadataReader {
 		}
 
 		return size;
-	}
-
-	/**
-	 * Determine if {@code} query matches {@code data} at {@code index}
-	 * 
-	 * @param data  search space
-	 * @param index start index
-	 * @param query search term
-	 * @return true if {@code query} is found at {@code index}
-	 */
-	private static boolean prefixMatches(byte[] data, int index, byte[] query) {
-		int offset = 0;
-
-		for (; offset < query.length; offset++) {
-			if (data[index + offset] != query[offset]) {
-				break;
-			}
-		}
-
-		return offset == query.length;
-	}
-
-	/**
-	 * Extract embedded images from byte array
-	 * 
-	 * @param data full ID3 frame containing header, mime type, and image data
-	 * @return CoverArt instance corresponding to given array
-	 */
-	private static CoverArt extractImage(byte[] data) {
-		// TODO: jpeg support
-		String mimeType = "image/";
-		String subType = "";
-
-		int imageStart = 0;
-		int imageEnd = data.length;
-		for (int idx = 0; idx < data.length; ++idx) {
-			if (prefixMatches(data, idx, MIME_IMAGE_PNG)) {
-				subType = "png";
-			} else if (prefixMatches(data, idx, MIME_IMAGE_JPEG)) {
-				// skip 'jpeg', separator, picture type, separator
-				imageStart = idx + 7;
-				subType = "jpeg";
-
-				break;
-			} else if (prefixMatches(data, idx, MIME_IMAGE_WEBP)) {
-				// skip 'webp', separator, picture type, separator
-				// TODO: can probably combine any mime types that don't have additional
-				// header/footer checks necessary
-				imageStart = idx + 7;
-				subType = "webp";
-
-				break;
-			}
-
-			// PNG is the only mime type that has additional checks needed (so far)
-			if (subType.equals("png")) {
-				if (prefixMatches(data, idx, PNG_HEADER)) {
-					imageStart = idx;
-				}
-				if (prefixMatches(data, idx, PNG_FOOTER)) {
-					imageEnd = idx + PNG_FOOTER.length;
-					break;
-				}
-			}
-		}
-
-		byte[] imageData = Arrays.copyOfRange(data, imageStart, imageEnd);
-		return new CoverArt(mimeType + subType, imageData);
 	}
 }

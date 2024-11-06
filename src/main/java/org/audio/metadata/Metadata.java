@@ -1,6 +1,7 @@
 package org.audio.metadata;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,12 +27,12 @@ public class Metadata {
 	/**
 	 * Map of textual metadata using {@link Constants} wherever possible.
 	 */
-	public Map<String, List<String>> textFields;
+	private Map<String, List<String>> textFields;
 
 	/**
 	 * List of all images embedded in audio file in order of occurrence.
 	 */
-	public List<CoverArt> images;
+	private List<CoverArt> images;
 
 	/**
 	 * Initialize new instance with empty collections
@@ -69,5 +70,29 @@ public class Metadata {
 	 */
 	public void addImage(CoverArt image) {
 		images.add(image);
+	}
+
+	/**
+	 * Returns an unmodifiable list of extracted images.
+	 * 
+	 * @return unmodifiable view of {@code images}.
+	 */
+	public List<CoverArt> getImages() {
+		// since CoverArt objects are immutable, we shouldn't need to
+		// worry about modifications.
+		return Collections.unmodifiableList(images);
+	}
+
+	/**
+	 * Returns an unmodifiable map of extracted text fields.
+	 * 
+	 * @return unmodifiable view of {@code textFields}.
+	 */
+	public Map<String, List<String>> getTextFields() {
+		Map<String, List<String>> copy = new HashMap<>();
+		for (String key : textFields.keySet()) {
+			copy.put(key, Collections.unmodifiableList(textFields.get(key)));
+		}
+		return Collections.unmodifiableMap(copy);
 	}
 }

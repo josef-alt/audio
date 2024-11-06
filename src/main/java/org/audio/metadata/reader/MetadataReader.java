@@ -51,7 +51,11 @@ public abstract class MetadataReader {
 				reader = new M4AReader();
 				break;
 			case MP4:
+				reader = new MP4Reader();
+				break;
 			case DASH:
+				reader = new DASHReader();
+				break;
 			default:
 				throw new IllegalArgumentException("Unrecognized file format");
 		}

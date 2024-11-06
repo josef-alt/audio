@@ -35,7 +35,9 @@ public class WAVEReader extends MetadataReader {
 	 */
 	private static final int CHUNK_HEADER_SIZE = 8;
 
-	// some common tags and their meanings
+	/**
+	 * Mapping from WAV four character codes to {@link Constants}.
+	 */
 	private static final Map<String, String> WAV_TAGS;
 	static {
 		Map<String, String> tags = new HashMap<>();

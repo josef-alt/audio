@@ -9,6 +9,10 @@ import org.audio.utils.FileUtils;
  * Abstract class representing generic metadata reader.
  */
 public abstract class MetadataReader {
+
+	/**
+	 * Location of audio file
+	 */
 	protected Path source;
 
 	/**

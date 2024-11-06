@@ -59,7 +59,7 @@ public class CoverArtTest {
 	 */
 	private void testCoverArt(String filePath, String expectedImage) {
 		AudioFile af = new AudioFile(Path.of(testDirectory, filePath));
-		List<CoverArt> cover = af.getMetadata().images;
+		List<CoverArt> cover = af.getMetadata().getImages();
 
 		if (cover.isEmpty()) {
 			fail("No cover art found");

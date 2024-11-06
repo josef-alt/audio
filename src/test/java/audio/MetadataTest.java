@@ -85,10 +85,11 @@ public class MetadataTest {
 
 		AudioFile af = new AudioFile(path);
 		Metadata meta = af.getMetadata();
+		Map<String, List<String>> textFields = meta.getTextFields();
 
 		for (String key : expected.keySet()) {
-			assertTrue(meta.textFields.containsKey(key));
-			assertTrue(meta.textFields.get(key).containsAll(expected.get(key)));
+			assertTrue(textFields.containsKey(key));
+			assertTrue(textFields.get(key).containsAll(expected.get(key)));
 		}
 	}
 

@@ -14,6 +14,9 @@ import org.audio.metadata.Constants;
 import org.audio.metadata.CoverArt;
 import org.audio.metadata.Metadata;
 
+/**
+ * Reads metadata from FLAC files.
+ */
 public class FLACReader extends MetadataReader {
 
 	/**
@@ -23,8 +26,19 @@ public class FLACReader extends MetadataReader {
 	protected FLACReader() {
 	}
 
+	/**
+	 * Standard header size in bytes for FLAC files
+	 */
 	private static final int FLAC_HEADER_SIZE = 4;
+
+	/**
+	 * Standard header size in bytes for each block
+	 */
 	private static final int BLOCK_HEADER_SIZE = 4;
+
+	/**
+	 * Mapping from VORBIS tags to {@link Constants}.
+	 */
 	private static final Map<String, String> VORBIS_TAGS;
 	static {
 		Map<String, String> tags = new HashMap<>();

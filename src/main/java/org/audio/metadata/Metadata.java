@@ -10,7 +10,7 @@ import java.util.Map;
  */
 public class Metadata {
 
-	/**
+	/*
 	 * TODO: This needs some work, most text fields cannot have multiple entries.
 	 * 
 	 * <p>
@@ -22,7 +22,15 @@ public class Metadata {
 	 * LinkedHashSet seem like overkill. For now, I will just use {@link List}.
 	 * </p>
 	 */
+
+	/**
+	 * Map of textual metadata using {@link Constants} wherever possible.
+	 */
 	public Map<String, List<String>> textFields;
+
+	/**
+	 * List of all images embedded in audio file in order of occurrence.
+	 */
 	public List<CoverArt> images;
 
 	/**

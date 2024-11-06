@@ -28,7 +28,9 @@ public class ID3TagReader extends MetadataReader {
 	protected ID3TagReader() {
 	}
 
-	// all the officially supported id3 tags and their meanings
+	/**
+	 * Mapping from ID3 tags to {@link Constants}.
+	 */
 	private static final Map<String, String> ID3_TAGS;
 	static {
 		Map<String, String> tags = new HashMap<>();

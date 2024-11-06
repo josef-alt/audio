@@ -11,6 +11,7 @@ import java.util.Map;
 
 import org.audio.metadata.Constants;
 import org.audio.metadata.Metadata;
+import org.audio.utils.ImageExtractor;
 
 /**
  * Reads metadata from M4A files marked with ftypM4A
@@ -223,7 +224,7 @@ public class M4AReader extends MetadataReader{
 					// use a character encoding that will support this.
 					String key = new String(type, StandardCharsets.ISO_8859_1);
 					if (key.equals("covr")) {
-						// TODO: handle images
+						metadata.addImage(ImageExtractor.extractImage(data));
 					} else {
 						// convert four-cc to constant name
 						if (M4A_TAGS.containsKey(key)) {

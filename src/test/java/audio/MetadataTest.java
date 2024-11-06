@@ -140,7 +140,7 @@ public class MetadataTest {
 
 	@Test
 	void test_M4A() {
-		assertThrows(IllegalArgumentException.class, () -> test("m4a"));
+		test("m4a");
 	}
 
 	@Test

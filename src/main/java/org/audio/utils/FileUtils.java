@@ -27,6 +27,9 @@ public class FileUtils {
 
 	/**
 	 * File format according to the file extension
+	 * 
+	 * @param path location of audio file in question.
+	 * @return {@link Format} enum representing the associated file type.
 	 */
 	public static Format determineFormatByName(Path path) {
 		String fileName = path.getFileName().toString().toLowerCase();
@@ -52,6 +55,9 @@ public class FileUtils {
 
 	/**
 	 * File format according to the first few bytes
+	 * 
+	 * @param path location of audio file in question.
+	 * @return {@link Format} enum representing the associated file type.
 	 */
 	public static Format determineFormatByHeader(Path path) {
 		byte[] header = getHeader(path);

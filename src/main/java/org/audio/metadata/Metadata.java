@@ -6,8 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Hopefully this will alleviate some of the issues encountered trying
- * to store metadata as a simple map.
+ * Data class for storing and structuring extracted metadata.
  */
 public class Metadata {
 
@@ -26,6 +25,9 @@ public class Metadata {
 	public Map<String, List<String>> textFields;
 	public List<CoverArt> images;
 
+	/**
+	 * Initialize new instance with empty collections
+	 */
 	public Metadata() {
 		textFields = new HashMap<>();
 		images = new ArrayList<>();

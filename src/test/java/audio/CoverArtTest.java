@@ -54,7 +54,7 @@ public class CoverArtTest {
 	 * Extract's the first image found in {@code filePath} and compares it to
 	 * the pre-loaded {@code expectedImage}.
 	 * 
-	 * @param fileName      path to test case
+	 * @param filePath      path to test case
 	 * @param expectedImage name of expected cover art
 	 */
 	private void testCoverArt(String filePath, String expectedImage) {

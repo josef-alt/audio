@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.channels.FileChannel;
+import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.Collections;
 import java.util.HashMap;
@@ -16,6 +17,13 @@ import org.audio.metadata.Metadata;
  * Read metadata from audio files according to wave specifications.
  */
 public class WAVEReader extends MetadataReader {
+
+	/**
+	 * Prevent instantiation from outside.
+	 * Use {@link MetadataReader#of(Path)} to create instances.
+	 */
+	protected WAVEReader() {
+	}
 
 	/**
 	 * WAVE format specifies 44 byte file header

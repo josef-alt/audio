@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.channels.FileChannel;
+import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.Collections;
 import java.util.HashMap;
@@ -14,6 +15,13 @@ import org.audio.metadata.CoverArt;
 import org.audio.metadata.Metadata;
 
 public class FLACReader extends MetadataReader {
+
+	/**
+	 * Prevent instantiation from outside.
+	 * Use {@link MetadataReader#of(Path)} to create instances.
+	 */
+	protected FLACReader() {
+	}
 
 	private static final int FLAC_HEADER_SIZE = 4;
 	private static final int BLOCK_HEADER_SIZE = 4;

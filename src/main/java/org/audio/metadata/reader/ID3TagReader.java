@@ -21,6 +21,13 @@ import org.audio.utils.ImageExtractor;
  */
 public class ID3TagReader extends MetadataReader {
 
+	/**
+	 * Prevent instantiation from outside.
+	 * Use {@link MetadataReader#of(Path)} to create instances.
+	 */
+	protected ID3TagReader() {
+	}
+
 	// all the officially supported id3 tags and their meanings
 	private static final Map<String, String> ID3_TAGS;
 	static {

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.Collections;
 import java.util.HashMap;
@@ -17,6 +18,13 @@ import org.audio.utils.ImageExtractor;
  * Reads metadata from M4A files marked with ftypM4A
  */
 public class M4AReader extends MetadataReader{
+
+	/**
+	 * Prevent instantiation from outside.
+	 * Use {@link MetadataReader#of(Path)} to create instances.
+	 */
+	protected M4AReader() {
+	}
 
 	/**
 	 * Mappings from M4A four character code tags to {@link Constants}.

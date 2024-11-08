@@ -65,12 +65,12 @@ public class ID3TagReader extends MetadataReader {
 		tags.put("TDAT", Constants.DATE);
 		tags.put("TDLY", "Playlist delay");
 		tags.put("TENC", "Encoded by");
-		tags.put("TEXT", "Lyricist");
+		tags.put("TEXT", Constants.LYRICIST);
 		tags.put("TFLT", "File type");
 		tags.put("TIME", "Time");
 		tags.put("TIT1", "Content group description");
 		tags.put("TIT2", Constants.TITLE);
-		tags.put("TIT3", "Subtitle");
+		tags.put("TIT3", Constants.SUBTITLE);
 		tags.put("TKEY", "Initial key");
 		tags.put("TLAN", "Language(s)");
 		tags.put("TLEN", "Length");
@@ -100,7 +100,7 @@ public class ID3TagReader extends MetadataReader {
 		tags.put("USER", "Terms of use");
 		tags.put("USLT", "Unsychronized lyric");
 		tags.put("WCOM", "Commercial information");
-		tags.put("WCOP", "Copyright/Legal information");
+		tags.put("WCOP", Constants.COPYRIGHT_WEBPAGE);
 		tags.put("WOAF", Constants.FILE_WEBPAGE);
 		tags.put("WOAR", Constants.ARTIST_WEBPAGE);
 		tags.put("WOAS", "Official audio source webpage");

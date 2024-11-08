@@ -32,6 +32,11 @@ public final class Constants {
 	public static final String TITLE = "Title";
 
 	/**
+	 * Sub-title, opus number, performance location, etc
+	 */
+	public static final String SUBTITLE = "Subtitle";
+
+	/**
 	 * Name of the original composer
 	 */
 	public static final String COMPOSER = "Composer";
@@ -45,6 +50,11 @@ public final class Constants {
 	 * Name of the orchestra or backing musicians
 	 */
 	public static final String ACCOMPANIMENT = "Accompaniment";
+
+	/**
+	 * Lyricist information
+	 */
+	public static final String LYRICIST = "Lyricist";
 
 	/**
 	 * Content type or genre
@@ -75,6 +85,11 @@ public final class Constants {
 	 * Copyright information
 	 */
 	public static final String COPYRIGHT = "Copyright";
+
+	/**
+	 * Website containing copyright information
+	 */
+	public static final String COPYRIGHT_WEBPAGE = "Copyright Site";
 
 	/**
 	 * International Standard Recording Code

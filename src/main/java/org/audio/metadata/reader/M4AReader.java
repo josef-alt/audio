@@ -190,11 +190,22 @@ public class M4AReader extends MetadataReader{
 	 */
 	private void parseUserData(ByteBuffer buffer, Metadata metadata) {
 		// size of metadata block
-		int size = buffer.getInt();
+		int size;
 
 		// meta type
 		byte[] type = new byte[4];
-		buffer.get(type);
+
+		// files may contain other types of chunks that are not currently supported
+		// read until we find the start of the meta chunk
+		do {
+			size = buffer.getInt();
+			buffer.get(type);
+
+			// skip chunk if Xtra or some other unsupported type
+			if (!isMetaHeader(type)) {
+				buffer.position(buffer.position() + size - CHUNK_HEADER_SIZE);
+			}
+		} while (!isMetaHeader(type));
 
 		// sample offset table version
 		int version = buffer.get();
@@ -251,5 +262,17 @@ public class M4AReader extends MetadataReader{
 				System.out.println(new String(data));
 			}
 		}
+	}
+
+	/**
+	 * Return whether or not an array represents the header of the meta-data
+	 * section.
+	 * 
+	 * @param header four byte character code
+	 * @return true if {@code header} equals 'meta'
+	 */
+	private static boolean isMetaHeader(byte[] header) {
+		return (header[0] & 0xFF) == 0x6D && (header[1] & 0xFF) == 0x65 && (header[2] & 0xFF) == 0x74
+				&& (header[3] & 0xFF) == 0x61;
 	}
 }

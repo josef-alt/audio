@@ -86,7 +86,8 @@ public class FileUtils {
 		else if ((header[4] & 0xFF) == 0x66 && (header[5] & 0xFF) == 0x74 && (header[6] & 0xFF) == 0x79
 				&& (header[7] & 0xFF) == 0x70) {
 			// ftyp
-			if ((header[8] & 0xFF) == 0x4D && (header[9] & 0xFF) == 0x34 && (header[10] & 0xFF) == 0x41) {
+			if ((header[8] & 0xFF) == 0x4D && (header[9] & 0xFF) == 0x34 && (header[10] & 0xFF) == 0x41
+					&& (header[11] & 0xFF) == 0x20) {
 				// Sample:
 				// ....ftypM4A ....
 				// M4A isomiso2..À]

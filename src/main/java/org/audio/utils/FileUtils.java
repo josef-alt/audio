@@ -91,6 +91,12 @@ public class FileUtils {
 				// ....ftypM4A ....
 				// M4A isomiso2..À]
 				return Format.M4A;
+			} else if ((header[8] & 0xFF) == 0x69 && (header[9] & 0xFF) == 0x73 && (header[10] & 0xFF) == 0x6F
+					&& (header[11] & 0xFF) == 0x6D) {
+				// Sample:
+				// ....ftypisom....
+				// isomiso2mp41..ü.
+				return Format.M4A;
 			} else if ((header[8] & 0xFF) == 0x64 && (header[9] & 0xFF) == 0x61 && (header[10] & 0xFF) == 0x73
 					&& (header[11] & 0xFF) == 0x68) {
 				// Sample:

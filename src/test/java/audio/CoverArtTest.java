@@ -75,7 +75,7 @@ public class CoverArtTest {
 	 * @param filePath relative path to test file.
 	 */
 	@ParameterizedTest
-	@ValueSource(strings = { "flac/mb with jpg.flac", "mp3/sample with jpg.mp3", "wav/sample2.WAV" })
+	@ValueSource(strings = { "flac/mb with jpg.flac", "mp3/sample with jpg.mp3", "wav/sample2.WAV", "m4a/sample2.m4a" })
 	void test_mbJPG(String filePath) {
 		testCoverArt(filePath, "mb.jpg");
 	}
@@ -86,7 +86,7 @@ public class CoverArtTest {
 	 * @param filePath relative path to test file.
 	 */
 	@ParameterizedTest
-	@ValueSource(strings = { "flac/mb with png.flac", "mp3/sample with png.mp3", "wav/sample3.WAV" })
+	@ValueSource(strings = { "flac/mb with png.flac", "mp3/sample with png.mp3", "wav/sample3.WAV", "m4a/sample3.m4a" })
 	void test_mbPNG(String filePath) {
 		testCoverArt(filePath, "mb.png");
 	}
@@ -97,7 +97,8 @@ public class CoverArtTest {
 	 * @param filePath relative path to test file.
 	 */
 	@ParameterizedTest
-	@ValueSource(strings = { "flac/mb with webp.flac", "mp3/sample with webp.mp3", "wav/sample1.WAV" })
+	@ValueSource(strings = { "flac/mb with webp.flac", "mp3/sample with webp.mp3", "wav/sample1.WAV",
+			"m4a/sample1.m4a" })
 	void test_mbWEBP(String filePath) {
 		testCoverArt(filePath, "mb.webp");
 	}

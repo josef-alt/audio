@@ -54,9 +54,6 @@ public abstract class MetadataReader {
 			case M4A:
 				reader = new M4AReader();
 				break;
-			case MP4:
-				reader = new MP4Reader();
-				break;
 			case DASH:
 				reader = new DASHReader();
 				break;

@@ -108,7 +108,7 @@ public class FileUtils {
 				// Sample:
 				// ....ftypmp42....
 				// mp41isom..ßAmoov
-				return Format.MP4;
+				return Format.M4A;
 			}
 		}
 		// WMA

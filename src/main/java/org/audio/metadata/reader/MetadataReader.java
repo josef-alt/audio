@@ -51,6 +51,7 @@ public abstract class MetadataReader {
 			case WAV:
 				reader = new WAVEReader();
 				break;
+			case MP4:
 			case M4A:
 				reader = new M4AReader();
 				break;

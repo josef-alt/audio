@@ -136,15 +136,8 @@ public class M4AReader extends MetadataReader{
 			byte[] minorVersion = new byte[4];
 			chunkBuffer.get(minorVersion);
 
-			// unknown number of compatible brands
-			// bytesToRead - majorBrand.length - minorVersion.length bytes
-			// each compatible brand should be four bytes
-			int comptatibleCount = (bytesToRead - 8) / 4;
-			for (int c = 0; c < comptatibleCount; c++) {
-				byte[] compatible = new byte[4];
-				chunkBuffer.get(compatible);
-				// TODO: add to metadata?
-			}
+			// discard compatible types for now
+			chunkBuffer.position(chunkBuffer.position() + bytesToRead - 8);
 		}
 	}
 
@@ -258,9 +251,7 @@ public class M4AReader extends MetadataReader{
 				}
 			} else {
 				// TODO: handle other chunk types
-				byte[] data = new byte[size - CHUNK_HEADER_SIZE];
-				buffer.get(data);
-				System.out.println(new String(data));
+				buffer.position(buffer.position() + size - CHUNK_HEADER_SIZE);
 			}
 		}
 	}

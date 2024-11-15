@@ -168,7 +168,6 @@ public class M4AReader extends MetadataReader{
 						&& (fourCC[3] & 0xFF) == 0x61) {
 					parseUserData(chunkBuffer, metadata);
 				} else {
-					System.out.println("skip " + new String(fourCC));
 					chunkBuffer.position(chunkBuffer.position() + size - CHUNK_HEADER_SIZE);
 				}
 			}

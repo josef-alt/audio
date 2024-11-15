@@ -10,8 +10,8 @@ To do: come up with better name than audio
 | AAC | No | No |
 | AIF(F) | No | No |
 | Mp3 | No | Yes |
-| Mp4 | No | No |
-| M4A | No | No |
+| Mp4 | No | Yes |
+| M4A | No | Yes |
 | FLAC | No | Yes |
 | OGG| No | No |
 | WAV | No | Yes |

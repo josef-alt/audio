@@ -43,6 +43,7 @@ public class M4AReader extends MetadataReader{
 		tags.put("\u00A9too", Constants.ENCODING_INFO);
 		tags.put("\u00A9day", Constants.YEAR);
 		tags.put("gnre", Constants.GENRE);
+		tags.put("\u00A9gen", Constants.GENRE);
 		M4A_TAGS = Collections.unmodifiableMap(tags);
 	}
 

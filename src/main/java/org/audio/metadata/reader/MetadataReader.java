@@ -56,6 +56,9 @@ public abstract class MetadataReader {
 			case M4A:
 				reader = new M4AReader();
 				break;
+			case OGG:
+				reader = new OGGReader();
+				break;
 			default:
 				throw new IllegalArgumentException("Unrecognized file format");
 		}

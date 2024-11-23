@@ -1,4 +1,4 @@
-package audio;
+package audio.functional;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.fail;

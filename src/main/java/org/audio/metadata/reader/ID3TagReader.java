@@ -235,43 +235,7 @@ public class ID3TagReader extends MetadataReader {
 					if (tag.equals(ID3_TAGS.get("APIC"))) {
 						metadata.addImage(ImageExtractor.extractImage(frameData));
 					} else {
-						String value = new String(frameData);
-						// character encoding
-						if (frameData.length > 0) {
-							switch (frameData[0]) {
-								case 0:
-									// ISO 8859 1
-									value = new String(frameData, 1, frameData.length - 2);
-									break;
-								case 1:
-									// UTF 16 BOM
-									// 0xFFFE = little endian
-									// 0xFEFF = big endian
-									boolean bigEndian = (frameData[1] & 0xFF) == 0xFE && (frameData[2] & 0xFF) == 0xFF;
-									if (bigEndian) {
-										// skip encoding flag and two byte BOM, cut off null terminator
-										value = new String(frameData, 3, size - 5, StandardCharsets.UTF_16BE);
-									} else {
-										// skip encoding flag and two byte BOM, cut off null terminator
-										value = new String(frameData, 3, size - 5, StandardCharsets.UTF_16LE);
-									}
-									break;
-								case 2:
-									// UTF 16 without BOM
-									// given StandardCharsets.UTF_16's behavior, I could just combine cases 1 & 2
-									// for now I will leave them separate for clarity
-
-									// skip encoding flag, cut off null terminator
-									value = new String(frameData, 1, size - 3, StandardCharsets.UTF_16);
-									break;
-								case 3:
-									// UTF 8
-									value = new String(frameData, 1, frameData.length - 2, StandardCharsets.UTF_8);
-									break;
-							}
-						}
-
-						metadata.addTextField(tag, value);
+						metadata.addTextField(tag, encodeString(frameData));
 					}
 				}
 			}
@@ -340,5 +304,56 @@ public class ID3TagReader extends MetadataReader {
 		}
 
 		return size;
+	}
+
+	/**
+	 * Returns the string representation of the given binary data encoded according
+	 * to the prefix code.
+	 * 
+	 * <p>
+	 * Prefix Guide
+	 * </p>
+	 * <ul>
+	 * <li>0 = ASCII</li>
+	 * <li>1 = UTF-16 with BOM</li>
+	 * <li>2 = UTF-16 without BOM</li>
+	 * </ul>
+	 * 
+	 * @param bytes the bytes to converted to characters
+	 * @return a string representation of {@code bytes}.
+	 */
+	private static String encodeString(byte[] bytes) {
+		// attempt to determine proper encoding based on first byte
+		if (bytes.length > 0) {
+			switch (bytes[0]) {
+				case 0:
+					// ISO 8859 1
+					return new String(bytes, 1, bytes.length - 2);
+				case 1:
+					// UTF 16 BOM
+					// 0xFFFE = little endian
+					// 0xFEFF = big endian
+					boolean bigEndian = (bytes[1] & 0xFF) == 0xFE && (bytes[2] & 0xFF) == 0xFF;
+					if (bigEndian) {
+						// skip encoding flag and two byte BOM, cut off null terminator
+						return new String(bytes, 3, bytes.length - 5, StandardCharsets.UTF_16BE);
+					} else {
+						// skip encoding flag and two byte BOM, cut off null terminator
+						return new String(bytes, 3, bytes.length - 5, StandardCharsets.UTF_16LE);
+					}
+				case 2:
+					// UTF 16 without BOM
+					// given StandardCharsets.UTF_16's behavior, I could just combine cases 1 & 2
+					// for now I will leave them separate for clarity
+
+					// skip encoding flag, cut off null terminator
+					return new String(bytes, 1, bytes.length - 3, StandardCharsets.UTF_16);
+				case 3:
+					// UTF 8
+					return new String(bytes, 1, bytes.length - 2, StandardCharsets.UTF_8);
+			}
+		}
+
+		return new String();
 	}
 }

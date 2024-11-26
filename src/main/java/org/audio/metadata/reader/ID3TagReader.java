@@ -178,17 +178,24 @@ public class ID3TagReader extends MetadataReader {
 				int ext_padding = buffer.getInt();
 			}
 
-			// reading all frames
-			// TODO break into chunks
-			buffer = ByteBuffer.allocate(id3_length);
-			channel.read(buffer);
-			buffer.flip();
+			int bytesRead = 0;
+			int bytesToRead = id3_length;
 
 			// iterate through all frames
 			// 4 byte frame ID
 			// 4 byte frame size
 			// 2 byte frame flags
-			while (buffer.hasRemaining()) {
+			while (bytesRead < bytesToRead) {
+				// re-allocate buffer for header only
+				buffer = ByteBuffer.allocate(HEADER_SIZE);
+				nRead = channel.read(buffer);
+				if (nRead != HEADER_SIZE) {
+					// break out and return metadata if any issues occur
+					break;
+				}
+				buffer.flip();
+				bytesRead += nRead;
+
 				byte[] frameID = new byte[4];
 				buffer.get(frameID);
 
@@ -198,6 +205,16 @@ public class ID3TagReader extends MetadataReader {
 				int size = convertBytesToInt(frameSize, id3_version == 4);
 
 				short flags = buffer.getShort();
+
+				// re-allocate buffer for full frame
+				buffer = ByteBuffer.allocate(size);
+				nRead = channel.read(buffer);
+				if (nRead != size) {
+					// break out and return metadata if any issues occur
+					break;
+				}
+				buffer.flip();
+				bytesRead += nRead;
 
 				byte[] frameData = new byte[size];
 				buffer.get(frameData);

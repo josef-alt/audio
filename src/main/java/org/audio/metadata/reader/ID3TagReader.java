@@ -231,7 +231,6 @@ public class ID3TagReader extends MetadataReader {
 						tag = ID3_TAGS.get(tag);
 					}
 
-					// TODO: ID3 allows multiple PRIV tags but this will only show the last one
 					// TODO: COMR commercial frame allows image/png and image/jpeg
 					if (tag.equals(ID3_TAGS.get("APIC"))) {
 						metadata.addImage(ImageExtractor.extractImage(frameData));

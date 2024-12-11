@@ -1,6 +1,10 @@
 package org.audio.metadata.reader;
 
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
 import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -10,6 +14,10 @@ import org.audio.metadata.Metadata;
 
 /**
  * Reads metadata from OGG files.
+ * 
+ * <p>
+ * Notes: OGG could be used with Opus, Vorbis, Theora, or Speex.
+ * </p>
  */
 public class OGGReader extends MetadataReader {
 
@@ -38,6 +46,11 @@ public class OGGReader extends MetadataReader {
 	}
 
 	/**
+	 * OGG headers are 27 bytes long.
+	 */
+	private static final int PAGE_HEADER_SIZE = 27;
+
+	/**
 	 * Reads metadata from given OGG files
 	 * 
 	 * @return metadata in key-value pairs
@@ -45,8 +58,58 @@ public class OGGReader extends MetadataReader {
 	public Metadata getMetadata() {
 		Metadata metadata = new Metadata();
 
-		// TODO: figure out ogg parsing
-		// I imagine this will be very similar to FLAC
+		try (FileChannel channel = FileChannel.open(source, StandardOpenOption.READ)) {
+			// tracking file position
+			long fileSize = channel.size();
+			long position = 0;
+
+			// reading pages
+			while (position < fileSize) {
+				ByteBuffer buffer = ByteBuffer.allocate(PAGE_HEADER_SIZE);
+				channel.read(buffer);
+				buffer.flip();
+
+				if (buffer.remaining() < PAGE_HEADER_SIZE) {
+					// error
+					break;
+				}
+
+				// OggS
+				byte[] capture = new byte[4];
+				buffer.get(capture);
+				
+				// header information
+				byte version = buffer.get();
+				byte type = buffer.get();
+				long granule = buffer.getLong();
+				int serialNumber = buffer.getInt();
+				int sequenceNumber = buffer.getInt();
+				int checkSum = buffer.getInt();
+				byte segments = buffer.get();
+				
+				position += PAGE_HEADER_SIZE;
+
+				// read in table of segment sizes
+				ByteBuffer table = ByteBuffer.allocate(segments);
+				table.flip();
+				byte[] segmentTable = new byte[segments];
+				table.get(segmentTable);
+
+				// read all segments
+				for (byte segmentSize : segmentTable) {
+					ByteBuffer segmentBuffer = ByteBuffer.allocate(segmentSize);
+					channel.read(segmentBuffer);
+					segmentBuffer.flip();
+
+					// TODO handle segment
+
+					position += segmentSize;
+				}
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		return metadata;
 	}

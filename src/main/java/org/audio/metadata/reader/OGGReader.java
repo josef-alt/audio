@@ -91,19 +91,20 @@ public class OGGReader extends MetadataReader {
 
 				// read in table of segment sizes
 				ByteBuffer table = ByteBuffer.allocate(segments);
+				channel.read(table);
 				table.flip();
 				byte[] segmentTable = new byte[segments];
 				table.get(segmentTable);
 
 				// read all segments
 				for (byte segmentSize : segmentTable) {
-					ByteBuffer segmentBuffer = ByteBuffer.allocate(segmentSize);
+					ByteBuffer segmentBuffer = ByteBuffer.allocate(segmentSize & 0xFF);
 					channel.read(segmentBuffer);
 					segmentBuffer.flip();
 
 					// TODO handle segment
 
-					position += segmentSize;
+					position += segmentSize & 0xFF;
 				}
 			}
 		} catch (IOException e) {

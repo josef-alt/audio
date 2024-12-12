@@ -7,8 +7,6 @@ To do: come up with better name than audio
 ## My Supported Formats
 | Container | Can Play | Can Read Metadata |
 | :- | :- | :- |
-| AAC | No | No |
-| AIF(F) | No | No |
 | Mp3 | No | Yes |
 | Mp4 | No | Yes |
 | M4A | No | Yes |
@@ -20,8 +18,6 @@ To do: come up with better name than audio
 ## JavaFX Supported Formats
 | Container | Can Play | Can Read Metadata |
 | :- | :- | :- |
-| AAC | Yes | No |
-| AIF(F) | Yes | No |
 | Mp3 | Yes | Yes |
 | Mp4 | Yes | No |
 | M4A | Yes | No |

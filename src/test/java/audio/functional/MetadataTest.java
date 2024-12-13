@@ -135,7 +135,7 @@ public class MetadataTest {
 
 	@Test
 	void test_OGG() {
-		assertThrows(IllegalArgumentException.class, () -> test("ogg"));
+		test("ogg");
 	}
 
 	@Test

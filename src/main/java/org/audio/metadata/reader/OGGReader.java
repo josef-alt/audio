@@ -107,6 +107,11 @@ public class OGGReader extends MetadataReader {
 
 				// read all segments
 				for (byte segmentSize : segmentTable) {
+					// ignore empty segments when entry is a multiple of 255
+					if (segmentSize == 0) {
+						continue;
+					}
+
 					ByteBuffer segmentBuffer = ByteBuffer.allocate(segmentSize & 0xFF);
 					channel.read(segmentBuffer);
 					segmentBuffer.flip();

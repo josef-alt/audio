@@ -81,6 +81,15 @@ public class OGGReader extends MetadataReader {
 				// header information
 				byte version = buffer.get();
 				byte type = buffer.get();
+
+				if (type == 1) {
+					// continuation of previous page
+				} else if (type == 2) {
+					// first page
+				} else if (type == 3) {
+					// last page
+				}
+
 				long granule = buffer.getLong();
 				int serialNumber = buffer.getInt();
 				int sequenceNumber = buffer.getInt();

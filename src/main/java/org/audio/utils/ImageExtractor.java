@@ -46,9 +46,10 @@ public class ImageExtractor {
 			}
 
 			// PNG is the only mime type that has additional checks needed (so far)
-			if (subType.equals("png")) {
+			if (subType.equals("png") || subType.isEmpty()) {
 				if (prefixMatches(data, idx, PNG_HEADER)) {
 					imageStart = idx;
+					subType = "png";
 				}
 				if (prefixMatches(data, idx, PNG_FOOTER)) {
 					imageEnd = idx + PNG_FOOTER.length;

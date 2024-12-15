@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.NotDirectoryException;
 import java.nio.file.Path;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -21,12 +20,12 @@ public class BulkImageExtraction {
 	/**
 	 * Name of folder containing sample audio files
 	 */
-	private static final String inputDirectory = "E:/Media/Music/with art/";
+	private static final String inputDirectory = "";
 
 	/**
 	 * Name of output directory for extracted images
 	 */
-	private static final String outputDirectory = "E:/Media/Music/dummy folder/";
+	private static final String outputDirectory = "";
 
 	/**
 	 * Sample script using the audio library to extract the first image from a batch
@@ -67,7 +66,6 @@ public class BulkImageExtraction {
 				}
 				if (meta.getImages().get(0).getMimeType().endsWith("/")) {
 					System.err.printf("No mime type found for %s%n", file.toString());
-					System.out.println(Arrays.toString(meta.getImages().get(0).getBinaryData()).substring(0, 50));
 				}
 
 				// writing extracted image to file

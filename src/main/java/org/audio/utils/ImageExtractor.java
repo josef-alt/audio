@@ -45,9 +45,6 @@ public class ImageExtractor {
 				// TODO: possibly handle different sub-types separately
 				imageStart = 0;
 				subType = "jpeg";
-			} else if (prefixMatches(data, idx, JFIF_HEADER)) {
-				imageStart = 0;
-				subType = "jpeg";
 
 				break;
 			} else if (prefixMatches(data, idx, MIME_IMAGE_WEBP)) {
@@ -107,11 +104,6 @@ public class ImageExtractor {
 	 * MIME type for WEBP
 	 */
 	private static final byte[] MIME_IMAGE_WEBP = "webp".getBytes();
-
-	/**
-	 * String found near beginning of JPEG File Interchange Format images.
-	 */
-	private static final byte[] JFIF_HEADER = "JFIF".getBytes();
 
 	/**
 	 * Determine if {@code} query matches {@code data} at {@code index}

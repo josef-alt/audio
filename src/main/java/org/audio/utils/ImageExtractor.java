@@ -30,6 +30,21 @@ public class ImageExtractor {
 				subType = "jpeg";
 
 				break;
+			} else if (prefixMatches(data, idx, JPEG_HEADER_PREFIX)) {
+				// sans image/jpeg the prefix FF D8 indicates generic JPEG
+				// FF D8 FF DB
+				// FF D8 FF E0 00 10 4A 46 49 46 00 01
+				// FF D8 FF EE
+
+				// FF D8 FF E1 x x 45 78 69 66 00 00
+				// JPEG with Exif data
+
+				// FF D8 FF E0
+				// standard JPEG/JFIF
+
+				// TODO: possibly handle different sub-types separately
+				imageStart = 0;
+				subType = "jpeg";
 			} else if (prefixMatches(data, idx, JFIF_HEADER)) {
 				imageStart = 0;
 				subType = "jpeg";
@@ -82,6 +97,11 @@ public class ImageExtractor {
 	 * MIME type for JPEG
 	 */
 	private static final byte[] MIME_IMAGE_JPEG = "jpeg".getBytes();
+
+	/**
+	 * 3 byte common prefix for various types of JPEG headers
+	 */
+	private static final byte[] JPEG_HEADER_PREFIX = { (byte) 0xFF, (byte) 0xD8, (byte) 0xFF };
 
 	/**
 	 * MIME type for WEBP

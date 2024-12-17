@@ -36,6 +36,8 @@ Whether it is for reference to a format I've never encountered before, or to vie
 * implementation details
   * MP3/ID3
     * https://id3.org/
+  * Mp4/M4A
+    * https://www.cimarronsystems.com/wp-content/uploads/2017/04/Elements-of-the-H.264-VideoAAC-Audio-MP4-Movie-v2_0.pdf
   * FLAC
     * https://xiph.org/flac/format.html
     * https://xiph.org/vorbis/doc/v-comment.html
@@ -43,5 +45,4 @@ Whether it is for reference to a format I've never encountered before, or to vie
     * http://www.topherlee.com/software/pcm-tut-wavformat.html
     * https://www.recordingblogs.com/wiki/list-chunk-of-a-wave-file
     * https://www.aelius.com/njh/wavemetatools/doc/riffmci.pdf
-  * M4A
-    * https://www.cimarronsystems.com/wp-content/uploads/2017/04/Elements-of-the-H.264-VideoAAC-Audio-MP4-Movie-v2_0.pdf
+ 

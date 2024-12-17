@@ -41,6 +41,8 @@ Whether it is for reference to a format I've never encountered before, or to vie
   * FLAC
     * https://xiph.org/flac/format.html
     * https://xiph.org/vorbis/doc/v-comment.html
+  * OGG
+    * https://xiph.org/ogg/doc/rfc3533.txt
   * WAV(E)
     * http://www.topherlee.com/software/pcm-tut-wavformat.html
     * https://www.recordingblogs.com/wiki/list-chunk-of-a-wave-file

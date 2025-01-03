@@ -94,7 +94,7 @@ public class OGGReader extends MetadataReader {
 				int serialNumber = buffer.getInt();
 				int sequenceNumber = buffer.getInt();
 				int checkSum = buffer.getInt();
-				byte segments = buffer.get();
+				int segments = buffer.get() & 0xFF;
 				
 				position += PAGE_HEADER_SIZE;
 

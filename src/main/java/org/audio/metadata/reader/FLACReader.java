@@ -163,7 +163,6 @@ public class FLACReader extends MetadataReader {
 	 */
 	public static void extractVORBISData(FileChannel channel, int blockLength, Metadata metadata) {
 		try {
-			System.out.println("Reading " + blockLength + " bytes of data");
 			ByteBuffer buffer = ByteBuffer.allocate(blockLength);
 			channel.read(buffer);
 			buffer.flip();

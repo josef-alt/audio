@@ -201,7 +201,7 @@ public class FLACReader extends MetadataReader {
 				}
 
 				if (equalSign != -1) {
-					String tag = new String(comment, 0, equalSign);
+					String tag = new String(comment, 0, equalSign).toUpperCase();
 					String value = new String(comment, equalSign + 1, length - equalSign - 1);
 
 					// convert vorbis tags to a descriptor common across all supported formats

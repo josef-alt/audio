@@ -1,10 +1,12 @@
 package org.audio.metadata.reader;
 
 import java.io.IOException;
+import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -49,6 +51,11 @@ public class OGGReader extends MetadataReader {
 	 * OGG headers are 27 bytes long.
 	 */
 	private static final int PAGE_HEADER_SIZE = 27;
+	
+	/**
+	 * VORBIS segment header
+	 */
+	private static final byte[] VORBIS_HEADER = {0x76, 0x6F, 0x72, 0x62, 0x69, 0x73 };
 
 	/**
 	 * Reads metadata from given OGG files
@@ -111,14 +118,25 @@ public class OGGReader extends MetadataReader {
 					if (segmentSize == 0) {
 						continue;
 					}
+					
+					int length = segmentSize & 0xFF;
+					try {
+						if (length > 7) {
+							ByteBuffer segmentBuffer = ByteBuffer.allocate(7);
+							channel.read(segmentBuffer);
+							segmentBuffer.flip();
 
-					ByteBuffer segmentBuffer = ByteBuffer.allocate(segmentSize & 0xFF);
-					channel.read(segmentBuffer);
-					segmentBuffer.flip();
-
-					// TODO handle segment
-
-					position += segmentSize & 0xFF;
+							byte[] marker = new byte[7];
+							segmentBuffer.get(marker);
+							if (Arrays.equals(marker, 1, 7, VORBIS_HEADER, 0, 6)) {
+								FLACReader.extractVORBISData(channel, length - 7, metadata);
+							}
+						}
+					} catch (BufferUnderflowException | NegativeArraySizeException e) {
+						// TODO: first block is inconsistently sized and causes errors
+					}
+	
+					position += length;
 				}
 			}
 		} catch (IOException e) {
